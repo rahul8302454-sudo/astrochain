@@ -733,4 +733,28 @@
                     '<td>' + (order.product ? order.product.name : 'N/A') + '</td>' +
                     '<td>₹' + order.amount + '</td>' +
                     '<td><span class="badge bg-success">' + order.status + '</span></td>' +
-                    '<td>' + new Date(order.date).toLocaleDateString()
+                    '<td>' + new Date(order.date).toLocaleDateString() + '</td>' +
+                '</tr>';
+            });
+        }
+        
+        function saveSettings(event) {
+            event.preventDefault();
+            const settings = {
+                siteName: document.getElementById('siteName').value,
+                email: document.getElementById('siteEmail').value,
+                phone: document.getElementById('sitePhone').value,
+                upiId: document.getElementById('upiId').value
+            };
+            localStorage.setItem('astroSettings', JSON.stringify(settings));
+            alert('Settings saved successfully!');
+        }
+        
+        function initializeAdmin() {
+            updateDashboard();
+            loadProductsTable();
+            loadOrdersTable();
+        }
+    </script>
+</body>
+</html>
