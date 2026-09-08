@@ -925,7 +925,7 @@
             }
         }
 
-        // ============ OPEN UPI APP ============
+        // ============ OPEN UPI APP VIA payment.html ============
         function openUPIApp() {
             if (!currentOrderData) { alert('Order data not found!'); return; }
             
@@ -933,63 +933,20 @@
             const productName = currentOrderData.product.name;
             const orderId = currentOrderData.orderId;
             
-            // Create UPI link with all parameters
-            const upiParams = new URLSearchParams({
-                pa: UPI_ID,
-                pn: MERCHANT_NAME,
-                am: amount.toString(),
-                cu: 'INR',
-                tn: 'Payment for ' + productName,
-                tr: orderId
-            });
+            // Save pending order
+            sessionStorage.setItem('pendingOrder', JSON.stringify(currentOrderData));
+            sessionStorage.setItem('selectedApp', selectedUPIApp);
             
-            const upiLink = 'upi://pay?' + upiParams.toString();
+            // Build payment.html URL
+            const paymentUrl = 'payment.html' +
+                '?upi=' + encodeURIComponent(UPI_ID) +
+                '&am=' + amount +
+                '&name=' + encodeURIComponent(productName) +
+                '&orderId=' + encodeURIComponent(orderId) +
+                '&app=' + selectedUPIApp;
             
-            // App-specific links
-            let appLink = upiLink;
-            
-            if (selectedUPIApp === 'googlepay') {
-                appLink = 'tez://upi/pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'phonepe') {
-                appLink = 'phonepe://pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'paytm') {
-                appLink = 'paytmmp://pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'bhim') {
-                appLink = 'bhim://upi/pay?' + upiParams.toString();
-            }
-            
-            // Try to open specific app first
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // Create hidden iframe for deep link
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = appLink;
-                document.body.appendChild(iframe);
-                
-                // Fallback to generic UPI after 1 second
-                setTimeout(function() {
-                    window.location.href = upiLink;
-                }, 1000);
-                
-                // Remove iframe after 3 seconds
-                setTimeout(function() {
-                    document.body.removeChild(iframe);
-                }, 3000);
-                
-            } else {
-                // Desktop - show UPI ID
-                alert('Please pay using UPI ID: ' + UPI_ID + '\nAmount: ₹' + amount + '\nOrder ID: ' + orderId);
-            }
-            
-            // Show confirmation after 3 seconds
-            setTimeout(function() {
-                const confirmed = confirm('Payment complete?\n\nOrder ID: ' + orderId + '\nAmount: ₹' + amount + '\n\nClick OK to confirm your order.');
-                if (confirmed) {
-                    completeOrder();
-                }
-            }, 3000);
+            // Redirect to payment page
+            window.location.href = paymentUrl;
         }
 
         // ============ COMPLETE ORDER ============
@@ -1027,6 +984,35 @@
             }, 3000);
         }
 
+        // ============ COMPLETE ORDER FROM PAYMENT RETURN ============
+        function completeOrderFromPayment(orderData, paymentApp) {
+            const order = {
+                id: orderData.orderId,
+                product: orderData.product,
+                customerDetails: orderData.customerDetails,
+                amount: orderData.amount,
+                paymentMethod: paymentApp.toUpperCase(),
+                paymentStatus: 'Paid',
+                date: new Date().toISOString(),
+                status: 'Confirmed'
+            };
+            
+            orders.push(order);
+            localStorage.setItem('astroOrders', JSON.stringify(orders));
+            
+            document.getElementById('successOrderId').textContent = order.id;
+            
+            const successModal = document.getElementById('successModal');
+            successModal.style.display = 'flex';
+            successModal.style.justifyContent = 'center';
+            successModal.style.alignItems = 'center';
+            
+            setTimeout(function() {
+                successModal.style.display = 'none';
+                showHome();
+            }, 3000);
+        }
+
         // ============ MY ORDERS ============
         function loadMyOrders() {
             const ordersList = document.getElementById('ordersList');
@@ -1043,6 +1029,23 @@
         // ============ INITIALIZE ============
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts('productGrid');
+            
+            // Check if returning from payment
+            const pendingOrder = sessionStorage.getItem('pendingOrder');
+            if (pendingOrder) {
+                const orderData = JSON.parse(pendingOrder);
+                const selectedApp = sessionStorage.getItem('selectedApp') || 'googlepay';
+                
+                setTimeout(function() {
+                    const confirmed = confirm('Payment complete?\n\nOrder ID: ' + orderData.orderId + '\nAmount: ₹' + orderData.amount + '\n\nClick OK to confirm your order.');
+                    if (confirmed) {
+                        completeOrderFromPayment(orderData, selectedApp);
+                    }
+                    
+                    sessionStorage.removeItem('pendingOrder');
+                    sessionStorage.removeItem('selectedApp');
+                }, 1000);
+            }
         });
     </script>
 </body>
