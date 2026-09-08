@@ -85,6 +85,8 @@
             cursor: pointer;
             padding: 25px 0;
             display: block;
+            background: none;
+            border: none;
         }
 
         .nav-link:hover,
@@ -287,6 +289,10 @@
             overflow-y: auto;
         }
 
+        .product-modal.show {
+            display: block;
+        }
+
         .modal-content {
             background: var(--white);
             margin: 30px auto;
@@ -305,6 +311,8 @@
             cursor: pointer;
             color: var(--text);
             z-index: 10;
+            background: none;
+            border: none;
         }
 
         .close-modal:hover {
@@ -404,7 +412,7 @@
             background: var(--dark);
         }
 
-        /* CHECKOUT MODAL */
+        /* ADDRESS MODAL */
         .checkout-modal {
             display: none;
             position: fixed;
@@ -415,6 +423,10 @@
             height: 100%;
             background: rgba(0,0,0,0.8);
             overflow-y: auto;
+        }
+
+        .checkout-modal.show {
+            display: block;
         }
 
         .checkout-content {
@@ -457,7 +469,7 @@
             border-color: var(--gold);
         }
 
-        /* UPI PAYMENT MODAL */
+        /* PAYMENT MODAL */
         .payment-modal {
             display: none;
             position: fixed;
@@ -468,6 +480,10 @@
             height: 100%;
             background: rgba(0,0,0,0.8);
             overflow-y: auto;
+        }
+
+        .payment-modal.show {
+            display: block;
         }
 
         .payment-content {
@@ -496,6 +512,11 @@
         }
 
         .upi-app:hover {
+            border-color: var(--gold);
+            background: var(--gray);
+        }
+
+        .upi-app.selected {
             border-color: var(--gold);
             background: var(--gray);
         }
@@ -540,6 +561,9 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.8);
+        }
+
+        .success-modal.show {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -637,9 +661,9 @@
             </button>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a class="nav-link active" id="homeLink" onclick="showHome()">Home</a></li>
-                <li><a class="nav-link" id="collectionLink" onclick="showCollection()">Collection</a></li>
-                <li><a class="nav-link" onclick="showMyOrders()">My Orders</a></li>
+                <li><button class="nav-link active" id="homeLink" onclick="showHome()">Home</button></li>
+                <li><button class="nav-link" id="collectionLink" onclick="showCollection()">Collection</button></li>
+                <li><button class="nav-link" onclick="showMyOrders()">My Orders</button></li>
             </ul>
         </div>
     </nav>
@@ -686,7 +710,7 @@
     <!-- PRODUCT MODAL -->
     <div class="product-modal" id="productModal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            <button class="close-modal" onclick="closeProductModal()">&times;</button>
             <div class="row">
                 <div class="col-md-6">
                     <div class="product-gallery">
@@ -769,19 +793,19 @@
             <p style="color: #666; margin-bottom: 20px;">Total Amount: <strong>₹<span id="paymentAmount">0</span></strong></p>
             
             <div class="upi-apps">
-                <div class="upi-app" onclick="selectUPI('googlepay')">
+                <div class="upi-app selected" onclick="selectUPI('googlepay', this)">
                     <i class="fab fa-google-pay" style="color: #4285F4;"></i>
                     <p>Google Pay</p>
                 </div>
-                <div class="upi-app" onclick="selectUPI('phonepe')">
+                <div class="upi-app" onclick="selectUPI('phonepe', this)">
                     <i class="fas fa-mobile-alt" style="color: #5F259F;"></i>
                     <p>PhonePe</p>
                 </div>
-                <div class="upi-app" onclick="selectUPI('paytm')">
+                <div class="upi-app" onclick="selectUPI('paytm', this)">
                     <i class="fas fa-wallet" style="color: #00BAF2;"></i>
                     <p>Paytm</p>
                 </div>
-                <div class="upi-app" onclick="selectUPI('other')">
+                <div class="upi-app" onclick="selectUPI('other', this)">
                     <i class="fas fa-university" style="color: #666;"></i>
                     <p>Other UPI</p>
                 </div>
@@ -794,7 +818,7 @@
     </div>
 
     <!-- SUCCESS MODAL -->
-    <div class="success-modal" id="successModal" style="display: none;">
+    <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
@@ -808,7 +832,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // DATA
+        // ============ DATA ============
         let products = JSON.parse(localStorage.getItem('astroProducts')) || [];
         let orders = JSON.parse(localStorage.getItem('astroOrders')) || [];
         let currentProductId = null;
@@ -818,7 +842,7 @@
         // YOUR UPI ID - CHANGE THIS
         const UPI_ID = "8619277016@ptyes"; // Apna UPI ID yahan dalo
 
-        // NAVIGATION
+        // ============ NAVIGATION ============
         function toggleMenu() {
             document.getElementById('navMenu').classList.toggle('open');
         }
@@ -859,7 +883,7 @@
             }
         }
 
-        // LOAD PRODUCTS
+        // ============ LOAD PRODUCTS ============
         function loadProducts(gridId) {
             const grid = document.getElementById(gridId);
             
@@ -902,7 +926,7 @@
             });
         }
 
-        // PRODUCT MODAL
+        // ============ PRODUCT MODAL ============
         function openProductModal(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
@@ -928,12 +952,16 @@
                 `;
             });
             
-            document.getElementById('productModal').style.display = 'block';
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
 
         function closeProductModal() {
-            document.getElementById('productModal').style.display = 'none';
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'none';
+            modal.classList.remove('show');
             document.body.style.overflow = 'auto';
             currentProductId = null;
         }
@@ -944,16 +972,22 @@
             element.classList.add('active');
         }
 
-        // QUICK BUY
+        // ============ QUICK BUY ============
         function quickBuy(productId) {
             currentProductId = productId;
             openAddressForm();
         }
 
-        // ADDRESS FORM
+        // ============ ADDRESS FORM ============
         function openAddressForm() {
             if (currentProductId === null) return;
-            document.getElementById('addressModal').style.display = 'block';
+            
+            const modal = document.getElementById('addressModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Close product modal if open
             closeProductModal();
         }
 
@@ -961,46 +995,82 @@
             event.preventDefault();
             
             const product = products.find(p => p.id === currentProductId);
-            if (!product) return;
+            if (!product) {
+                alert('Product not found!');
+                return;
+            }
+            
+            // Get form values
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const pincode = document.getElementById('pincode').value;
+            
+            // Validate
+            if (!fullName || !phone || !email || !address || !city || !state || !pincode) {
+                alert('Please fill all required fields!');
+                return;
+            }
             
             currentOrderData = {
                 product: product,
                 customerDetails: {
-                    fullName: document.getElementById('fullName').value,
-                    phone: document.getElementById('phone').value,
-                    email: document.getElementById('email').value,
-                    address: document.getElementById('address').value,
-                    city: document.getElementById('city').value,
-                    state: document.getElementById('state').value,
-                    pincode: document.getElementById('pincode').value
+                    fullName: fullName,
+                    phone: phone,
+                    email: email,
+                    address: address,
+                    city: city,
+                    state: state,
+                    pincode: pincode
                 },
                 amount: product.price
             };
             
+            // Update payment amount
             document.getElementById('paymentAmount').textContent = product.price.toFixed(2);
             document.getElementById('payButtonAmount').textContent = product.price.toFixed(2);
             
-            document.getElementById('addressModal').style.display = 'none';
-            document.getElementById('paymentModal').style.display = 'block';
+            // Hide address modal
+            const addressModal = document.getElementById('addressModal');
+            addressModal.style.display = 'none';
+            addressModal.classList.remove('show');
+            
+            // Show payment modal
+            const paymentModal = document.getElementById('paymentModal');
+            paymentModal.style.display = 'block';
+            paymentModal.classList.add('show');
+            
+            // Reset form
             document.getElementById('addressForm').reset();
         }
 
-        // UPI PAYMENT
-        function selectUPI(app) {
+        // ============ UPI PAYMENT ============
+        function selectUPI(app, element) {
             selectedUPIApp = app;
+            
             document.querySelectorAll('.upi-app').forEach(el => {
-                el.style.borderColor = 'var(--border)';
+                el.classList.remove('selected');
+                el.style.borderColor = '#e0e0e0';
+                el.style.background = '#ffffff';
             });
-            event.target.closest('.upi-app').style.borderColor = 'var(--gold)';
+            
+            element.classList.add('selected');
+            element.style.borderColor = '#c9a84c';
+            element.style.background = '#f8f8f8';
         }
 
         function processUPIPayment() {
-            if (!currentOrderData) return;
+            if (!currentOrderData) {
+                alert('Order data not found!');
+                return;
+            }
             
             const amount = currentOrderData.amount;
             const productName = currentOrderData.product.name;
             
-            // Create UPI payment link
             let upiLink = '';
             
             switch(selectedUPIApp) {
@@ -1017,18 +1087,19 @@
                     upiLink = `upi://pay?pa=${UPI_ID}&pn=AstroChain&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
             }
             
-            // Try to open UPI app
+            // Open UPI app
             window.location.href = upiLink;
             
-            // After 2 seconds, show payment confirmation
+            // Show confirmation after 2 seconds
             setTimeout(() => {
-                const confirmed = confirm('Have you completed the payment?');
+                const confirmed = confirm('Payment complete? Click OK to confirm your order.');
                 if (confirmed) {
                     completeOrder();
                 }
             }, 2000);
         }
 
+        // ============ COMPLETE ORDER ============
         function completeOrder() {
             if (!currentOrderData) return;
             
@@ -1045,19 +1116,28 @@
             orders.push(order);
             localStorage.setItem('astroOrders', JSON.stringify(orders));
             
-            document.getElementById('paymentModal').style.display = 'none';
+            // Hide payment modal
+            const paymentModal = document.getElementById('paymentModal');
+            paymentModal.style.display = 'none';
+            paymentModal.classList.remove('show');
+            
+            // Show success modal
             document.getElementById('successOrderId').textContent = order.id;
-            document.getElementById('successModal').style.display = 'flex';
+            const successModal = document.getElementById('successModal');
+            successModal.style.display = 'flex';
+            successModal.classList.add('show');
             
             setTimeout(() => {
-                document.getElementById('successModal').style.display = 'none';
+                successModal.style.display = 'none';
+                successModal.classList.remove('show');
                 currentProductId = null;
                 currentOrderData = null;
+                document.body.style.overflow = 'auto';
                 showHome();
             }, 3000);
         }
 
-        // MY ORDERS
+        // ============ MY ORDERS ============
         function loadMyOrders() {
             const ordersList = document.getElementById('ordersList');
             
@@ -1102,7 +1182,7 @@
             });
         }
 
-        // INITIALIZE
+        // ============ INITIALIZE ============
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts('productGrid');
         });
