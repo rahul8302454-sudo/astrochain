@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroChain - Premium Astrological Jewelry</title>
+    <title>AstroChain | Premium Astrological Jewelry</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #0f3460;
+            --white: #ffffff;
             --gold: #c9a84c;
-            --star: #e94560;
-            --cosmic: #533483;
+            --light-gold: #e8d5a3;
+            --dark: #1a1a1a;
+            --gray: #f8f8f8;
+            --silver: #c0c0c0;
+            --text: #333333;
         }
 
         * {
@@ -23,36 +25,44 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: var(--white);
+            color: var(--text);
         }
 
-        /* Navbar Styles */
+        /* Premium Navigation */
         .navbar {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: var(--white);
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .navbar-brand {
-            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(45deg, #c9a84c, #f0d060, #c9a84c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
+            color: var(--dark);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .navbar-brand span {
+            color: var(--gold);
         }
 
         .nav-link {
-            color: #e0e0e0 !important;
-            margin: 0 15px;
-            transition: all 0.3s;
+            color: var(--text) !important;
+            font-weight: 500;
+            margin: 0 20px;
             position: relative;
-        }
-
-        .nav-link:hover {
-            color: #c9a84c !important;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
         .nav-link::after {
@@ -61,10 +71,14 @@
             bottom: -5px;
             left: 50%;
             width: 0;
-            height: 2px;
-            background: #c9a84c;
+            height: 1px;
+            background: var(--gold);
             transition: all 0.3s;
             transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--gold) !important;
         }
 
         .nav-link:hover::after {
@@ -72,154 +86,299 @@
         }
 
         /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .hero {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
             padding: 100px 0;
             text-align: center;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .hero-section::before {
-            content: '';
+        .hero::before {
+            content: '✦';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="50" cy="30" r="1" fill="white" opacity="0.2"/><circle cx="80" cy="60" r="1" fill="white" opacity="0.4"/><circle cx="30" cy="80" r="1" fill="white" opacity="0.3"/><circle cx="70" cy="10" r="1" fill="white" opacity="0.5"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.3"/><circle cx="20" cy="50" r="1" fill="white" opacity="0.4"/><circle cx="60" cy="90" r="1" fill="white" opacity="0.2"/></svg>');
-            animation: twinkle 3s infinite;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: var(--gold);
+            opacity: 0.3;
+            animation: float 3s infinite;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-20px); }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 600;
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
             font-weight: 700;
-            color: white;
+            color: var(--dark);
             margin-bottom: 20px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s;
+            letter-spacing: 2px;
+        }
+
+        .hero-title span {
+            color: var(--gold);
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: #f0d060;
-            margin-bottom: 30px;
-            animation: fadeInUp 1.5s;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-shop {
+            background: var(--dark);
+            color: var(--white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid var(--dark);
         }
 
-        /* Product Cards */
+        .btn-shop:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
+        }
+
+        /* Product Grid */
+        .products-section {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--gold);
+            margin: 20px auto;
+        }
+
         .product-card {
-            background: white;
+            background: var(--white);
+            border: 1px solid #f0f0f0;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transition: all 0.3s;
             margin-bottom: 30px;
             position: relative;
+            cursor: pointer;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: var(--gold);
         }
 
         .product-image {
-            height: 300px;
+            height: 320px;
             background-size: cover;
             background-position: center;
             position: relative;
             overflow: hidden;
+            background-color: var(--gray);
         }
 
         .product-image::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .product-card:hover .product-image::after {
+            opacity: 1;
         }
 
         .product-badge {
             position: absolute;
             top: 15px;
-            right: 15px;
-            background: #e94560;
-            color: white;
+            left: 15px;
+            background: var(--gold);
+            color: var(--white);
             padding: 8px 15px;
-            border-radius: 25px;
+            border-radius: 50px;
+            font-size: 11px;
             font-weight: 600;
+            letter-spacing: 1px;
             z-index: 1;
         }
 
         .product-info {
-            padding: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .product-category {
+            font-size: 11px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
         .product-title {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
             margin-bottom: 10px;
-            color: #1a1a2e;
         }
 
         .product-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #c9a84c;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--dark);
             margin-bottom: 15px;
         }
 
-        .product-price .original-price {
-            font-size: 1rem;
+        .product-price .original {
+            font-size: 14px;
             color: #999;
             text-decoration: line-through;
             margin-left: 10px;
+            font-weight: 400;
         }
 
-        .btn-add-cart {
-            background: linear-gradient(45deg, #1a1a2e, #0f3460);
-            color: white;
+        .btn-add {
+            background: var(--dark);
+            color: var(--white);
             border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             transition: all 0.3s;
             width: 100%;
         }
 
-        .btn-add-cart:hover {
-            background: linear-gradient(45deg, #c9a84c, #f0d060);
-            color: #1a1a2e;
-            transform: scale(1.05);
+        .btn-add:hover {
+            background: var(--gold);
+            transform: scale(1.02);
+        }
+
+        /* Image Gallery Modal */
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .gallery-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .gallery-main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .gallery-thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .gallery-thumbnail:hover,
+        .gallery-thumbnail.active {
+            border-color: var(--gold);
+        }
+
+        .close-gallery {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: var(--white);
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 10000;
         }
 
         /* Cart Drawer */
         .cart-drawer {
             position: fixed;
             top: 0;
-            right: -400px;
-            width: 400px;
+            right: -450px;
+            width: 450px;
             height: 100vh;
-            background: white;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+            background: var(--white);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.2);
             transition: all 0.3s;
             z-index: 9999;
             display: flex;
@@ -245,57 +404,58 @@
             display: block;
         }
 
-        /* Admin Panel Styles */
-        .admin-sidebar {
-            background: linear-gradient(180deg, #1a1a2e, #16213e);
-            min-height: 100vh;
-            width: 250px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            padding: 20px;
-            transition: all 0.3s;
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 60px 0 20px;
+            margin-top: 80px;
         }
 
-        .admin-main {
-            margin-left: 250px;
-            padding: 20px;
-            background: #f5f5f5;
-            min-height: 100vh;
+        .footer h5 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            margin-bottom: 20px;
         }
 
-        .admin-link {
-            color: #e0e0e0;
-            padding: 12px 20px;
-            display: block;
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #999;
             text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 5px;
             transition: all 0.3s;
         }
 
-        .admin-link:hover {
-            background: rgba(201, 168, 76, 0.2);
-            color: #c9a84c;
+        .footer-links a:hover {
+            color: var(--gold);
         }
 
-        .admin-link.active {
-            background: #c9a84c;
-            color: #1a1a2e;
+        .social-icons a {
+            color: var(--white);
+            margin-right: 15px;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--gold);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
+                font-size: 32px;
             }
             
             .product-image {
-                height: 200px;
+                height: 250px;
             }
             
             .cart-drawer {
@@ -303,192 +463,183 @@
                 right: -100%;
             }
             
-            .admin-sidebar {
-                width: 100%;
-                position: relative;
-                min-height: auto;
+            .gallery-main-image {
+                height: 300px;
             }
             
-            .admin-main {
-                margin-left: 0;
+            .gallery-thumbnail {
+                width: 70px;
+                height: 70px;
             }
-        }
-
-        /* Loading Animation */
-        .loading-spinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10000;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #c9a84c;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas fa-star"></i> AstroChain
-            </a>
+            <a class="navbar-brand" href="index.html">Astro<span>Chain</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Shop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="openCart()">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                        </a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#collection">Collection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="openCart()">Cart (<span id="cartCount">0</span>)</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="hero-section">
-        <h1 class="hero-title">✨ Astrological Jewelry Collection ✨</h1>
-        <p class="hero-subtitle">Discover Your Cosmic Connection</p>
-        <button class="btn btn-outline-light btn-lg" onclick="window.location.href='shop.html'">
-            Shop Now
-        </button>
+    <div class="hero" id="home">
+        <div class="container">
+            <div class="hero-badge">Premium Collection 2024</div>
+            <h1 class="hero-title">Celestial <span>Elegance</span></h1>
+            <p class="hero-subtitle">Discover the perfect harmony between stars and style</p>
+            <a href="#collection" class="btn-shop">Explore Collection</a>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container my-5">
-        <div id="productList" class="row">
-            <!-- Products will be loaded here -->
+    <!-- Products Section -->
+    <div class="products-section" id="collection">
+        <div class="container">
+            <h2 class="section-title">Our Collection</h2>
+            <div class="row" id="productGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="products-section" id="about" style="background: var(--gray);">
+        <div class="container text-center">
+            <h2 class="section-title">Why Choose AstroChain</h2>
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-gem" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
+                    <h5 style="font-weight: 600;">Premium Quality</h5>
+                    <p class="text-muted">Handcrafted with finest materials</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-star" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
+                    <h5 style="font-weight: 600;">Astrological Precision</h5>
+                    <p class="text-muted">Aligned with cosmic energies</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-shield-alt" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
+                    <h5 style="font-weight: 600;">Trusted Quality</h5>
+                    <p class="text-muted">Certified and authentic products</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="gallery-modal">
+        <span class="close-gallery" onclick="closeGallery()">&times;</span>
+        <div class="gallery-content">
+            <img id="galleryMainImage" class="gallery-main-image" src="" alt="Product">
+            <div class="gallery-thumbnails" id="galleryThumbnails"></div>
         </div>
     </div>
 
     <!-- Cart Drawer -->
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
     <div class="cart-drawer" id="cartDrawer">
-        <div class="p-4">
-            <h3 class="mb-4">
-                <i class="fas fa-shopping-cart"></i> Your Cart
+        <div class="p-4" style="border-bottom: 1px solid #f0f0f0;">
+            <h4 style="font-family: 'Playfair Display', serif; font-weight: 700;">
+                Shopping Cart
                 <button class="btn btn-link float-end" onclick="closeCart()">
                     <i class="fas fa-times"></i>
                 </button>
-            </h3>
-            <div id="cartItems">
-                <!-- Cart items will be loaded here -->
+            </h4>
+        </div>
+        <div class="flex-grow-1 p-4" id="cartItems" style="overflow-y: auto;">
+            <!-- Cart items -->
+        </div>
+        <div class="p-4" style="border-top: 1px solid #f0f0f0;">
+            <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong>₹<span id="cartTotal">0</span></strong>
             </div>
-            <div class="mt-4">
-                <h4>Total: ₹<span id="cartTotal">0</span></h4>
-                <button class="btn btn-primary btn-lg w-100 mt-3" onclick="checkout()">
-                    Proceed to Checkout
-                </button>
-            </div>
+            <button class="btn-add" onclick="checkout()">Proceed to Checkout</button>
         </div>
     </div>
 
-    <!-- Loading Spinner -->
-    <div class="loading-spinner" id="loadingSpinner">
-        <div class="spinner"></div>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>AstroChain</h5>
+                    <p style="color: #999;">Premium astrological jewelry crafted with precision and care.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#collection">Collection</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact</h5>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@astrochain.com">support@astrochain.com</a></li>
+                        <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: #333; margin: 30px 0;">
+            <p class="text-center" style="color: #666; margin: 0;">© 2024 AstroChain. All Rights Reserved.</p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Product data structure
+        // Product Management
         let products = JSON.parse(localStorage.getItem('astroProducts')) || [];
         let cart = JSON.parse(localStorage.getItem('astroCart')) || [];
 
-        // Initialize default products if empty
-        if (products.length === 0) {
-            products = [
-                {
-                    id: 1,
-                    name: "Aries Zodiac Ring",
-                    description: "Premium quality Aries zodiac sign ring with intricate details.",
-                    price: 2999,
-                    originalPrice: 3999,
-                    image: "https://via.placeholder.com/300x300?text=Aries+Ring",
-                    category: "Zodiac Rings",
-                    stock: 15,
-                    discount: 25,
-                    couponCode: "ARIES25"
-                },
-                {
-                    id: 2,
-                    name: "Taurus Chain Pendant",
-                    description: "Beautiful Taurus constellation pendant with gold finish.",
-                    price: 2499,
-                    originalPrice: 3499,
-                    image: "https://via.placeholder.com/300x300?text=Taurus+Pendant",
-                    category: "Pendants",
-                    stock: 20,
-                    discount: 28,
-                    couponCode: "TAURUS28"
-                },
-                {
-                    id: 3,
-                    name: "Gemini Dual Ring",
-                    description: "Dual design Gemini ring representing the twins.",
-                    price: 3499,
-                    originalPrice: 4999,
-                    image: "https://via.placeholder.com/300x300?text=Gemini+Ring",
-                    category: "Zodiac Rings",
-                    stock: 10,
-                    discount: 30,
-                    couponCode: "GEMINI30"
-                }
-            ];
-            localStorage.setItem('astroProducts', JSON.stringify(products));
-        }
-
-        // Load products
+        // Load Products
         function loadProducts() {
-            const productList = document.getElementById('productList');
-            productList.innerHTML = '';
+            const productGrid = document.getElementById('productGrid');
+            
+            if (products.length === 0) {
+                productGrid.innerHTML = '<div class="col-12 text-center"><p>No products available</p></div>';
+                return;
+            }
+            
+            productGrid.innerHTML = '';
             
             products.forEach(product => {
-                const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                const images = product.images || [product.image];
+                const mainImage = images[0];
                 
-                productList.innerHTML += `
+                productGrid.innerHTML += `
                     <div class="col-md-4 col-sm-6">
-                        <div class="product-card">
-                            <div class="product-image" style="background-image: url('${product.image}')">
-                                ${discountPercent > 0 ? `<span class="product-badge">-${discountPercent}%</span>` : ''}
+                        <div class="product-card" onclick="openGallery(${product.id})">
+                            <div class="product-image" style="background-image: url('${mainImage}')">
+                                ${product.discount > 0 ? `<span class="product-badge">-${product.discount}%</span>` : ''}
                             </div>
                             <div class="product-info">
+                                <div class="product-category">${product.category || 'Astrology'}</div>
                                 <h3 class="product-title">${product.name}</h3>
-                                <p class="text-muted mb-2">${product.description.substring(0, 60)}...</p>
                                 <div class="product-price">
                                     ₹${product.price}
-                                    <span class="original-price">₹${product.originalPrice}</span>
+                                    ${product.originalPrice > product.price ? `<span class="original">₹${product.originalPrice}</span>` : ''}
                                 </div>
-                                ${product.stock > 0 ? 
-                                    `<button class="btn-add-cart" onclick="addToCart(${product.id})">
-                                        <i class="fas fa-cart-plus"></i> Add to Cart
-                                    </button>` :
-                                    `<button class="btn btn-danger w-100" disabled>Out of Stock</button>`
-                                }
+                                <button class="btn-add" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                    <i class="fas fa-shopping-bag"></i> Add to Cart
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -496,7 +647,44 @@
             });
         }
 
-        // Add to cart
+        // Open Gallery
+        function openGallery(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const images = product.images || [product.image];
+            const modal = document.getElementById('galleryModal');
+            const mainImage = document.getElementById('galleryMainImage');
+            const thumbnails = document.getElementById('galleryThumbnails');
+            
+            mainImage.src = images[0];
+            thumbnails.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                thumbnails.innerHTML += `
+                    <img src="${img}" class="gallery-thumbnail ${index === 0 ? 'active' : ''}" 
+                         onclick="changeMainImage('${img}', this)">
+                `;
+            });
+            
+            modal.style.display = 'block';
+        }
+
+        // Change Main Image
+        function changeMainImage(imageSrc, thumbnailElement) {
+            document.getElementById('galleryMainImage').src = imageSrc;
+            document.querySelectorAll('.gallery-thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            thumbnailElement.classList.add('active');
+        }
+
+        // Close Gallery
+        function closeGallery() {
+            document.getElementById('galleryModal').style.display = 'none';
+        }
+
+        // Add to Cart
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
@@ -509,45 +697,41 @@
                     id: productId,
                     name: product.name,
                     price: product.price,
-                    image: product.image,
+                    image: product.images ? product.images[0] : product.image,
                     quantity: 1
                 });
             }
             
             localStorage.setItem('astroCart', JSON.stringify(cart));
             updateCartCount();
-            showNotification('Product added to cart!');
         }
 
-        // Update cart count
+        // Update Cart Count
         function updateCartCount() {
-            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            const cartLink = document.querySelector('a[onclick="openCart()"]');
-            if (cartLink) {
-                cartLink.innerHTML = `<i class="fas fa-shopping-cart"></i> Cart (${cartCount})`;
-            }
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
         }
 
-        // Open cart
+        // Open Cart
         function openCart() {
             document.getElementById('cartDrawer').classList.add('open');
             document.getElementById('cartOverlay').classList.add('open');
             displayCartItems();
         }
 
-        // Close cart
+        // Close Cart
         function closeCart() {
             document.getElementById('cartDrawer').classList.remove('open');
             document.getElementById('cartOverlay').classList.remove('open');
         }
 
-        // Display cart items
+        // Display Cart Items
         function displayCartItems() {
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
             
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p class="text-center">Your cart is empty</p>';
+                cartItems.innerHTML = '<p class="text-center text-muted">Your cart is empty</p>';
                 cartTotal.textContent = '0';
                 return;
             }
@@ -558,19 +742,15 @@
             cart.forEach(item => {
                 total += item.price * item.quantity;
                 cartItems.innerHTML += `
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                            <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
-                            <div>
-                                <h6 class="mb-0">${item.name}</h6>
-                                <small class="text-muted">₹${item.price} x ${item.quantity}</small>
-                            </div>
+                    <div class="d-flex align-items-center mb-3 p-2" style="border-bottom: 1px solid #f0f0f0;">
+                        <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1">${item.name}</h6>
+                            <small class="text-muted">₹${item.price} × ${item.quantity}</small>
                         </div>
-                        <div>
-                            <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${item.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        <button class="btn btn-sm text-danger" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
             });
@@ -578,7 +758,7 @@
             cartTotal.textContent = total.toFixed(2);
         }
 
-        // Remove from cart
+        // Remove from Cart
         function removeFromCart(productId) {
             cart = cart.filter(item => item.id !== productId);
             localStorage.setItem('astroCart', JSON.stringify(cart));
@@ -589,51 +769,11 @@
         // Checkout
         function checkout() {
             if (cart.length === 0) {
-                showNotification('Your cart is empty!', 'error');
+                alert('Your cart is empty!');
                 return;
             }
             
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            
-            // Check for coupon code
-            let discount = 0;
-            const couponCode = prompt('Enter coupon code (if any):');
-            
-            if (couponCode) {
-                const product = products.find(p => p.couponCode === couponCode.toUpperCase());
-                if (product) {
-                    discount = (product.originalPrice - product.price) * 0.1; // Additional 10% discount
-                    showNotification(`Coupon applied! Additional discount: ₹${discount.toFixed(2)}`, 'success');
-                } else {
-                    showNotification('Invalid coupon code!', 'error');
-                }
-            }
-            
-            const finalTotal = total - discount;
-            
-            // Payment integration
-            const paymentMethod = prompt('Choose payment method:\n1. UPI\n2. Card\n3. Net Banking');
-            
-            showNotification(`Order placed successfully! Total: ₹${finalTotal.toFixed(2)}`, 'success');
-            
-            // Clear cart
-            cart = [];
-            localStorage.setItem('astroCart', JSON.stringify(cart));
-            updateCartCount();
-            closeCart();
-        }
-
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed top-0 end-0 m-3`;
-            notification.style.zIndex = '10001';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            alert('Checkout functionality will be integrated with payment gateway.');
         }
 
         // Initialize
