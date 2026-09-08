@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Payment...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8f8f8;
+        }
+        .container {
+            text-align: center;
+            padding: 30px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #c9a84c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h3>Opening Payment App...</h3>
+        <p>Please wait, you will be redirected</p>
+        <p style="margin-top: 20px; font-size: 12px; color: #999;">If app doesn't open, <a href="#" id="manualLink">click here</a></p>
+    </div>
+
+    <script>
+        // URL se parameters lo
+        const urlParams = new URLSearchParams(window.location.search);
+        const upiId = urlParams.get('upi');
+        const amount = urlParams.get('am');
+        const name = urlParams.get('name');
+        const orderId = urlParams.get('orderId');
+        const app = urlParams.get('app') || 'generic';
+        
+        // UPI Link banao
+        const upiParams = new URLSearchParams({
+            pa: upiId,
+            pn: 'AstroChain',
+            am: amount,
+            cu: 'INR',
+            tn: 'Payment for ' + name,
+            tr: orderId
+        });
+        
+        let upiLink = 'upi://pay?' + upiParams.toString();
+        
+        // App specific link
+        if (app === 'googlepay') {
+            upiLink = 'tez://upi/pay?' + upiParams.toString();
+        } else if (app === 'phonepe') {
+            upiLink = 'phonepe://pay?' + upiParams.toString();
+        } else if (app === 'paytm') {
+            upiLink = 'paytmmp://pay?' + upiParams.toString();
+        }
+        
+        // Manual link set karo
+        document.getElementById('manualLink').href = 'upi://pay?' + upiParams.toString();
+        
+        // Auto redirect - bina kisi warning ke
+        setTimeout(function() {
+            window.location.href = upiLink;
+        }, 500);
+        
+        // Agar 3 second mein wapas aaya to generic try karo
+        setTimeout(function() {
+            // Check if still on page
+            if (document.visibilityState === 'visible') {
+                window.location.href = 'upi://pay?' + upiParams.toString();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
