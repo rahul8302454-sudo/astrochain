@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --white: #ffffff;
@@ -722,31 +721,32 @@
     <!-- PAYMENT MODAL -->
     <div class="payment-modal" id="paymentModal">
         <div class="payment-content">
-            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Complete Your Payment</h3>
-            <p style="color: #666; margin-bottom: 20px;">Total Amount: <strong>₹<span id="paymentAmount">0</span></strong></p>
+            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Choose Payment App</h3>
+            <p style="color: #666; margin-bottom: 20px;">Total: <strong>₹<span id="paymentAmount">0</span></strong></p>
             
-            <div style="background: #f8f8f8; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
-                <p style="margin-bottom: 10px; font-weight: 600;">Scan QR Code or Use UPI ID</p>
-                <div id="qrCodeContainer" style="display: flex; justify-content: center; margin: 20px 0;"></div>
-                <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 15px;">
-                    <p style="margin: 0; font-size: 12px; color: #666;">UPI ID:</p>
-                    <p style="margin: 5px 0; font-size: 18px; font-weight: 700; color: #1a1a1a;" id="displayUpiId"></p>
-                    <button onclick="copyUPI()" style="background: #c9a84c; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 12px;">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
+            <div class="upi-apps">
+                <div class="upi-app selected" id="app_googlepay" onclick="selectUPI('googlepay')">
+                    <i class="fab fa-google-pay" style="color: #4285F4;"></i>
+                    <p>Google Pay</p>
+                </div>
+                <div class="upi-app" id="app_phonepe" onclick="selectUPI('phonepe')">
+                    <i class="fas fa-mobile-alt" style="color: #5F259F;"></i>
+                    <p>PhonePe</p>
+                </div>
+                <div class="upi-app" id="app_paytm" onclick="selectUPI('paytm')">
+                    <i class="fas fa-wallet" style="color: #00BAF2;"></i>
+                    <p>Paytm</p>
+                </div>
+                <div class="upi-app" id="app_bhim" onclick="selectUPI('bhim')">
+                    <i class="fas fa-university" style="color: #666;"></i>
+                    <p>BHIM/Other</p>
                 </div>
             </div>
             
-            <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <p style="margin: 0; font-size: 13px; color: #856404;">
-                    <i class="fas fa-info-circle"></i> 
-                    Open any UPI app (Google Pay, PhonePe, Paytm) and scan QR or pay to UPI ID
-                </p>
-            </div>
-            
-            <button class="btn-pay" onclick="confirmPayment()">
-                <i class="fas fa-check-circle"></i> I Have Paid ₹<span id="payButtonAmount">0</span>
+            <button class="btn-pay" onclick="openUPIApp()">
+                <i class="fas fa-external-link-alt"></i> Pay ₹<span id="payButtonAmount">0</span>
             </button>
+            <p style="font-size: 11px; color: #999; margin-top: 10px;">You will be redirected to your UPI app</p>
         </div>
     </div>
 
@@ -763,7 +763,7 @@
 
     <script>
         // ============ CONFIGURATION ============
-        const UPI_ID = "yourname@upi"; // APNA UPI ID YAHAN DALO
+        const UPI_ID = "8619277016@ptyes"; // APNA UPI ID YAHAN DALO
         const MERCHANT_NAME = "AstroChain";
         
         // ============ DATA ============
@@ -771,6 +771,7 @@
         let orders = JSON.parse(localStorage.getItem('astroOrders')) || [];
         let currentProductId = null;
         let currentOrderData = null;
+        let selectedUPIApp = 'googlepay';
 
         // ============ NAVIGATION ============
         function toggleMenu() {
@@ -902,64 +903,93 @@
             
             document.getElementById('paymentAmount').textContent = product.price.toFixed(2);
             document.getElementById('payButtonAmount').textContent = product.price.toFixed(2);
-            document.getElementById('displayUpiId').textContent = UPI_ID;
-            
-            // Generate QR Code
-            generateQRCode(currentOrderData);
             
             document.getElementById('addressModal').style.display = 'none';
             document.getElementById('paymentModal').style.display = 'block';
             document.getElementById('addressForm').reset();
         }
 
-        // ============ GENERATE QR CODE ============
-        function generateQRCode(orderData) {
-            const qrContainer = document.getElementById('qrCodeContainer');
-            qrContainer.innerHTML = '';
-            
-            const upiLink = 'upi://pay?pa=' + UPI_ID + '&pn=' + encodeURIComponent(MERCHANT_NAME) + '&am=' + orderData.amount + '&cu=INR&tn=' + encodeURIComponent('Payment for ' + orderData.product.name) + '&tr=' + orderData.orderId;
-            
-            if (typeof QRCode !== 'undefined') {
-                new QRCode(qrContainer, {
-                    text: upiLink,
-                    width: 200,
-                    height: 200,
-                    colorDark: '#1a1a1a',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            } else {
-                qrContainer.innerHTML = '<p style="color: #666;">Scan with any UPI app</p>';
+        // ============ SELECT UPI APP ============
+        function selectUPI(app) {
+            selectedUPIApp = app;
+            document.querySelectorAll('.upi-app').forEach(function(el) {
+                el.classList.remove('selected');
+                el.style.borderColor = '#e0e0e0';
+                el.style.background = '#ffffff';
+            });
+            const selectedEl = document.getElementById('app_' + app);
+            if (selectedEl) {
+                selectedEl.classList.add('selected');
+                selectedEl.style.borderColor = '#c9a84c';
+                selectedEl.style.background = '#f8f8f8';
             }
         }
 
-        // ============ COPY UPI ID ============
-        function copyUPI() {
-            const upiId = UPI_ID;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(upiId).then(function() {
-                    alert('UPI ID copied: ' + upiId);
-                });
-            } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = upiId;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('UPI ID copied: ' + upiId);
-            }
-        }
-
-        // ============ CONFIRM PAYMENT ============
-        function confirmPayment() {
+        // ============ OPEN UPI APP ============
+        function openUPIApp() {
             if (!currentOrderData) { alert('Order data not found!'); return; }
             
-            const confirmed = confirm('Have you completed the payment of ₹' + currentOrderData.amount + '?\n\nOrder ID: ' + currentOrderData.orderId + '\n\nClick OK to confirm your order.');
+            const amount = currentOrderData.amount;
+            const productName = currentOrderData.product.name;
+            const orderId = currentOrderData.orderId;
             
-            if (confirmed) {
-                completeOrder();
+            // Create UPI link with all parameters
+            const upiParams = new URLSearchParams({
+                pa: UPI_ID,
+                pn: MERCHANT_NAME,
+                am: amount.toString(),
+                cu: 'INR',
+                tn: 'Payment for ' + productName,
+                tr: orderId
+            });
+            
+            const upiLink = 'upi://pay?' + upiParams.toString();
+            
+            // App-specific links
+            let appLink = upiLink;
+            
+            if (selectedUPIApp === 'googlepay') {
+                appLink = 'tez://upi/pay?' + upiParams.toString();
+            } else if (selectedUPIApp === 'phonepe') {
+                appLink = 'phonepe://pay?' + upiParams.toString();
+            } else if (selectedUPIApp === 'paytm') {
+                appLink = 'paytmmp://pay?' + upiParams.toString();
+            } else if (selectedUPIApp === 'bhim') {
+                appLink = 'bhim://upi/pay?' + upiParams.toString();
             }
+            
+            // Try to open specific app first
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Create hidden iframe for deep link
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appLink;
+                document.body.appendChild(iframe);
+                
+                // Fallback to generic UPI after 1 second
+                setTimeout(function() {
+                    window.location.href = upiLink;
+                }, 1000);
+                
+                // Remove iframe after 3 seconds
+                setTimeout(function() {
+                    document.body.removeChild(iframe);
+                }, 3000);
+                
+            } else {
+                // Desktop - show UPI ID
+                alert('Please pay using UPI ID: ' + UPI_ID + '\nAmount: ₹' + amount + '\nOrder ID: ' + orderId);
+            }
+            
+            // Show confirmation after 3 seconds
+            setTimeout(function() {
+                const confirmed = confirm('Payment complete?\n\nOrder ID: ' + orderId + '\nAmount: ₹' + amount + '\n\nClick OK to confirm your order.');
+                if (confirmed) {
+                    completeOrder();
+                }
+            }, 3000);
         }
 
         // ============ COMPLETE ORDER ============
@@ -971,7 +1001,7 @@
                 product: currentOrderData.product,
                 customerDetails: currentOrderData.customerDetails,
                 amount: currentOrderData.amount,
-                paymentMethod: 'UPI',
+                paymentMethod: selectedUPIApp.toUpperCase(),
                 paymentStatus: 'Paid',
                 date: new Date().toISOString(),
                 status: 'Confirmed'
