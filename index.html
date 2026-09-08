@@ -11,7 +11,6 @@
         :root {
             --white: #ffffff;
             --gold: #c9a84c;
-            --light-gold: #e8d5a3;
             --dark: #1a1a1a;
             --gray: #f8f8f8;
             --text: #333333;
@@ -31,7 +30,7 @@
             padding-top: 70px;
         }
 
-        /* ============ NAVIGATION ============ */
+        /* NAVIGATION */
         .navbar {
             background: var(--white);
             padding: 0;
@@ -75,10 +74,6 @@
             padding: 0;
         }
 
-        .nav-item {
-            position: relative;
-        }
-
         .nav-link {
             color: var(--text);
             text-decoration: none;
@@ -92,24 +87,9 @@
             display: block;
         }
 
-        .nav-link:hover {
-            color: var(--gold);
-        }
-
+        .nav-link:hover,
         .nav-link.active {
             color: var(--gold);
-            border-bottom: 3px solid var(--gold);
-        }
-
-        .cart-badge {
-            background: var(--gold);
-            color: var(--white);
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 11px;
-            margin-left: 5px;
-            position: relative;
-            top: -10px;
         }
 
         .hamburger {
@@ -121,10 +101,10 @@
             color: var(--dark);
         }
 
-        /* ============ HERO SECTION ============ */
+        /* HERO */
         .hero {
             background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-            padding: 80px 0;
+            padding: 60px 0;
             text-align: center;
         }
 
@@ -137,17 +117,16 @@
             font-size: 12px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            margin-bottom: 15px;
         }
 
         .hero-title span {
@@ -155,16 +134,15 @@
         }
 
         .hero-subtitle {
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
-            margin-bottom: 40px;
-            font-weight: 300;
+            margin-bottom: 30px;
         }
 
         .btn-shop {
             background: var(--dark);
             color: var(--white);
-            padding: 15px 40px;
+            padding: 12px 35px;
             border-radius: 50px;
             font-size: 14px;
             letter-spacing: 2px;
@@ -182,18 +160,18 @@
             transform: translateY(-3px);
         }
 
-        /* ============ PRODUCT GRID ============ */
+        /* PRODUCTS */
         .products-section {
-            padding: 60px 0;
+            padding: 40px 0;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
             color: var(--dark);
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .section-title::after {
@@ -202,7 +180,7 @@
             width: 80px;
             height: 3px;
             background: var(--gold);
-            margin: 20px auto;
+            margin: 15px auto;
         }
 
         .product-card {
@@ -222,7 +200,7 @@
         }
 
         .product-image {
-            height: 300px;
+            height: 280px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -256,14 +234,14 @@
 
         .product-title {
             font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--dark);
             margin-bottom: 10px;
         }
 
         .product-price {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--dark);
             margin-bottom: 15px;
@@ -276,25 +254,27 @@
             margin-left: 10px;
         }
 
-        .btn-add {
-            background: var(--dark);
+        .btn-buy {
+            background: var(--gold);
             color: var(--white);
             border: none;
             padding: 12px 30px;
             border-radius: 50px;
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: all 0.3s;
             width: 100%;
             cursor: pointer;
+            font-weight: 600;
         }
 
-        .btn-add:hover {
-            background: var(--gold);
+        .btn-buy:hover {
+            background: var(--dark);
+            transform: scale(1.02);
         }
 
-        /* ============ PRODUCT MODAL ============ */
+        /* PRODUCT MODAL */
         .product-modal {
             display: none;
             position: fixed;
@@ -309,19 +289,19 @@
 
         .modal-content {
             background: var(--white);
-            margin: 50px auto;
+            margin: 30px auto;
             padding: 30px;
             width: 90%;
-            max-width: 1000px;
+            max-width: 900px;
             border-radius: 20px;
             position: relative;
         }
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 35px;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
             cursor: pointer;
             color: var(--text);
             z-index: 10;
@@ -333,12 +313,12 @@
 
         .product-gallery {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .main-image {
             flex: 1;
-            height: 400px;
+            height: 350px;
             border-radius: 15px;
             overflow: hidden;
             background: var(--gray);
@@ -357,8 +337,8 @@
         }
 
         .thumbnail {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
@@ -378,10 +358,10 @@
 
         .product-details h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .product-details .category {
@@ -389,20 +369,21 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .product-details .price {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .product-details .description {
             color: #666;
-            line-height: 1.8;
-            margin-bottom: 30px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
         .btn-buy-now {
@@ -415,89 +396,15 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             width: 100%;
-            margin-bottom: 10px;
             cursor: pointer;
+            font-weight: 600;
         }
 
         .btn-buy-now:hover {
             background: var(--dark);
         }
 
-        /* ============ CART DRAWER ============ */
-        .cart-drawer {
-            position: fixed;
-            top: 0;
-            right: -450px;
-            width: 450px;
-            height: 100vh;
-            background: var(--white);
-            box-shadow: -5px 0 30px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-drawer.open {
-            right: 0;
-        }
-
-        .cart-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 9998;
-            display: none;
-        }
-
-        .cart-overlay.open {
-            display: block;
-        }
-
-        .cart-header {
-            padding: 20px;
-            border-bottom: 2px solid var(--gold);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .cart-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-right: 15px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-footer {
-            padding: 20px;
-            border-top: 2px solid var(--gold);
-        }
-
-        /* ============ CHECKOUT MODAL ============ */
+        /* CHECKOUT MODAL */
         .checkout-modal {
             display: none;
             position: fixed;
@@ -515,22 +422,119 @@
             margin: 30px auto;
             padding: 30px;
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
             border-radius: 20px;
         }
 
-        .form-control {
+        .checkout-content h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+        }
+
+        .form-group {
             margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
             padding: 12px;
             border: 1px solid var(--border);
             border-radius: 10px;
+            font-size: 14px;
         }
 
-        /* ============ SUCCESS MODAL ============ */
-        .success-modal {
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        /* UPI PAYMENT MODAL */
+        .payment-modal {
             display: none;
             position: fixed;
             z-index: 10001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+
+        .payment-content {
+            background: var(--white);
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .upi-apps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .upi-app {
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upi-app:hover {
+            border-color: var(--gold);
+            background: var(--gray);
+        }
+
+        .upi-app i {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .upi-app p {
+            margin: 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-pay {
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .btn-pay:hover {
+            background: var(--dark);
+        }
+
+        /* SUCCESS MODAL */
+        .success-modal {
+            display: none;
+            position: fixed;
+            z-index: 10002;
             left: 0;
             top: 0;
             width: 100%;
@@ -560,7 +564,16 @@
             margin-bottom: 20px;
         }
 
-        /* ============ RESPONSIVE ============ */
+        /* ORDERS */
+        .order-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .hamburger {
                 display: block;
@@ -587,16 +600,11 @@
             }
 
             .hero-title {
-                font-size: 32px;
+                font-size: 28px;
             }
 
             .product-image {
-                height: 250px;
-            }
-
-            .cart-drawer {
-                width: 100%;
-                right: -100%;
+                height: 220px;
             }
 
             .product-gallery {
@@ -604,7 +612,7 @@
             }
 
             .main-image {
-                height: 300px;
+                height: 250px;
             }
 
             .thumbnail-list {
@@ -619,7 +627,7 @@
     </style>
 </head>
 <body>
-    <!-- ============ NAVIGATION ============ -->
+    <!-- NAVIGATION -->
     <nav class="navbar">
         <div class="container">
             <a class="navbar-brand" onclick="showHome()">Astro<span>Chain</span></a>
@@ -629,25 +637,14 @@
             </button>
             
             <ul class="nav-menu" id="navMenu">
-                <li class="nav-item">
-                    <a class="nav-link active" id="homeLink" onclick="showHome()">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="collectionLink" onclick="showCollection()">Collection</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="openCart()">
-                        Cart <span class="cart-badge" id="cartCount">0</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showMyOrders()">My Orders</a>
-                </li>
+                <li><a class="nav-link active" id="homeLink" onclick="showHome()">Home</a></li>
+                <li><a class="nav-link" id="collectionLink" onclick="showCollection()">Collection</a></li>
+                <li><a class="nav-link" onclick="showMyOrders()">My Orders</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- ============ HOME SECTION ============ -->
+    <!-- HOME SECTION -->
     <div id="homeSection">
         <div class="hero">
             <div class="container">
@@ -661,38 +658,32 @@
         <div class="products-section">
             <div class="container">
                 <h2 class="section-title">Featured Products</h2>
-                <div class="row" id="productGrid">
-                    <!-- Products loaded here -->
-                </div>
+                <div class="row" id="productGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- ============ COLLECTION SECTION ============ -->
+    <!-- COLLECTION SECTION -->
     <div id="collectionSection" style="display: none;">
         <div class="products-section">
             <div class="container">
                 <h2 class="section-title">Our Collection</h2>
-                <div class="row" id="collectionGrid">
-                    <!-- Products loaded here -->
-                </div>
+                <div class="row" id="collectionGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- ============ MY ORDERS SECTION ============ -->
+    <!-- ORDERS SECTION -->
     <div id="ordersSection" style="display: none;">
         <div class="products-section">
             <div class="container">
                 <h2 class="section-title">My Orders</h2>
-                <div id="ordersList">
-                    <!-- Orders loaded here -->
-                </div>
+                <div id="ordersList"></div>
             </div>
         </div>
     </div>
 
-    <!-- ============ PRODUCT MODAL ============ -->
+    <!-- PRODUCT MODAL -->
     <div class="product-modal" id="productModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeProductModal()">&times;</span>
@@ -715,95 +706,94 @@
                         </div>
                         <p class="description" id="modalDescription"></p>
                         
-                        <button class="btn-buy-now" onclick="openCheckout()">
+                        <button class="btn-buy-now" onclick="openAddressForm()">
                             <i class="fas fa-bolt"></i> Buy Now
                         </button>
-                        <button class="btn-add" onclick="addToCartFromModal()">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ============ CART DRAWER ============ -->
-    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-    <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-header">
-            <h3 style="margin: 0;">Shopping Cart</h3>
-            <button class="btn btn-link" onclick="closeCart()">
-                <i class="fas fa-times" style="font-size: 24px;"></i>
-            </button>
-        </div>
-        <div class="cart-items" id="cartItems"></div>
-        <div class="cart-footer">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 18px; font-weight: 600;">
-                <span>Total:</span>
-                <span>₹<span id="cartTotal">0</span></span>
-            </div>
-            <button class="btn-buy-now" onclick="openCheckout()">
-                Proceed to Checkout
-            </button>
-        </div>
-    </div>
-
-    <!-- ============ CHECKOUT MODAL ============ -->
-    <div class="checkout-modal" id="checkoutModal">
+    <!-- ADDRESS FORM MODAL -->
+    <div class="checkout-modal" id="addressModal">
         <div class="checkout-content">
-            <h3 style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif;">
-                Shipping Address
-            </h3>
-            <form id="checkoutForm" onsubmit="processPayment(event)">
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="fullName" placeholder="Full Name *" required>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="tel" class="form-control" id="phone" placeholder="Phone Number *" required>
-                    </div>
+            <h3>Shipping Address</h3>
+            <form id="addressForm" onsubmit="openPayment(event)">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" class="form-control" id="fullName" required>
                 </div>
-                <input type="email" class="form-control" id="email" placeholder="Email Address *" required>
-                <textarea class="form-control" id="address" rows="3" placeholder="Complete Address *" required></textarea>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="city" placeholder="City *" required>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="state" placeholder="State *" required>
-                    </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Complete Address *</label>
+                    <textarea class="form-control" id="address" rows="3" required></textarea>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="pincode" placeholder="PIN Code *" required>
+                        <div class="form-group">
+                            <label>City *</label>
+                            <input type="text" class="form-control" id="city" required>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="landmark" placeholder="Landmark (Optional)">
+                        <div class="form-group">
+                            <label>State *</label>
+                            <input type="text" class="form-control" id="state" required>
+                        </div>
                     </div>
                 </div>
-                
-                <h5 style="margin: 20px 0;">Payment Method</h5>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="upiPayment" value="UPI" checked>
-                    <label class="form-check-label" for="upiPayment">
-                        <i class="fas fa-mobile-alt"></i> UPI Payment
-                    </label>
-                </div>
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" value="Card">
-                    <label class="form-check-label" for="cardPayment">
-                        <i class="fas fa-credit-card"></i> Card Payment
-                    </label>
+                <div class="form-group">
+                    <label>PIN Code *</label>
+                    <input type="text" class="form-control" id="pincode" required>
                 </div>
                 
                 <button type="submit" class="btn-buy-now">
-                    <i class="fas fa-lock"></i> Pay ₹<span id="checkoutAmount">0</span>
+                    Continue to Payment
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ============ SUCCESS MODAL ============ -->
+    <!-- PAYMENT MODAL -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Choose Payment Method</h3>
+            <p style="color: #666; margin-bottom: 20px;">Total Amount: <strong>₹<span id="paymentAmount">0</span></strong></p>
+            
+            <div class="upi-apps">
+                <div class="upi-app" onclick="selectUPI('googlepay')">
+                    <i class="fab fa-google-pay" style="color: #4285F4;"></i>
+                    <p>Google Pay</p>
+                </div>
+                <div class="upi-app" onclick="selectUPI('phonepe')">
+                    <i class="fas fa-mobile-alt" style="color: #5F259F;"></i>
+                    <p>PhonePe</p>
+                </div>
+                <div class="upi-app" onclick="selectUPI('paytm')">
+                    <i class="fas fa-wallet" style="color: #00BAF2;"></i>
+                    <p>Paytm</p>
+                </div>
+                <div class="upi-app" onclick="selectUPI('other')">
+                    <i class="fas fa-university" style="color: #666;"></i>
+                    <p>Other UPI</p>
+                </div>
+            </div>
+            
+            <button class="btn-pay" onclick="processUPIPayment()">
+                <i class="fas fa-lock"></i> Make Payment ₹<span id="payButtonAmount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
     <div class="success-modal" id="successModal" style="display: none;">
         <div class="success-content">
             <div class="success-icon">
@@ -812,18 +802,23 @@
             <h3 style="color: #28a745; margin-bottom: 10px;">Order Successful!</h3>
             <p style="color: #666;">Thank you for your purchase</p>
             <p><strong>Order ID: #<span id="successOrderId"></span></strong></p>
+            <p style="color: #666; margin-top: 10px;">Redirecting to home...</p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ============ DATA ============
+        // DATA
         let products = JSON.parse(localStorage.getItem('astroProducts')) || [];
-        let cart = JSON.parse(localStorage.getItem('astroCart')) || [];
         let orders = JSON.parse(localStorage.getItem('astroOrders')) || [];
         let currentProductId = null;
+        let currentOrderData = null;
+        let selectedUPIApp = 'googlepay';
+        
+        // YOUR UPI ID - CHANGE THIS
+        const UPI_ID = "8619277016@ptyes"; // Apna UPI ID yahan dalo
 
-        // ============ NAVIGATION ============
+        // NAVIGATION
         function toggleMenu() {
             document.getElementById('navMenu').classList.toggle('open');
         }
@@ -864,7 +859,7 @@
             }
         }
 
-        // ============ LOAD PRODUCTS ============
+        // LOAD PRODUCTS
         function loadProducts(gridId) {
             const grid = document.getElementById(gridId);
             
@@ -897,8 +892,8 @@
                                     ₹${product.price}
                                     ${product.originalPrice > product.price ? `<span class="original-price">₹${product.originalPrice}</span>` : ''}
                                 </div>
-                                <button class="btn-add" onclick="event.stopPropagation(); quickAddToCart(${product.id})">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                <button class="btn-buy" onclick="event.stopPropagation(); quickBuy(${product.id})">
+                                    <i class="fas fa-bolt"></i> Buy Now
                                 </button>
                             </div>
                         </div>
@@ -907,7 +902,7 @@
             });
         }
 
-        // ============ PRODUCT MODAL ============
+        // PRODUCT MODAL
         function openProductModal(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
@@ -949,159 +944,100 @@
             element.classList.add('active');
         }
 
-        // ============ CART ============
-        function addToCartFromModal() {
+        // QUICK BUY
+        function quickBuy(productId) {
+            currentProductId = productId;
+            openAddressForm();
+        }
+
+        // ADDRESS FORM
+        function openAddressForm() {
             if (currentProductId === null) return;
-            addToCart(currentProductId);
-            closeProductModal();
-            openCart();
-        }
-
-        function quickAddToCart(productId) {
-            addToCart(productId);
-            showNotification('Product added to cart!');
-        }
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id: productId,
-                    name: product.name,
-                    price: product.price,
-                    image: product.images ? product.images[0] : product.image,
-                    quantity: 1
-                });
-            }
-            
-            localStorage.setItem('astroCart', JSON.stringify(cart));
-            updateCartCount();
-        }
-
-        function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
-        }
-
-        function openCart() {
-            document.getElementById('cartDrawer').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('open');
-            displayCartItems();
-        }
-
-        function closeCart() {
-            document.getElementById('cartDrawer').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('open');
-        }
-
-        function displayCartItems() {
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = `
-                    <div class="text-center py-5">
-                        <i class="fas fa-shopping-cart" style="font-size: 60px; color: #ccc;"></i>
-                        <h5 class="mt-3">Your cart is empty</h5>
-                    </div>
-                `;
-                cartTotal.textContent = '0';
-                return;
-            }
-            
-            cartItems.innerHTML = '';
-            let total = 0;
-            
-            cart.forEach(item => {
-                total += item.price * item.quantity;
-                cartItems.innerHTML += `
-                    <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}">
-                        <div class="cart-item-info">
-                            <h6 style="margin: 0 0 5px 0;">${item.name}</h6>
-                            <div style="color: var(--gold); font-weight: 600;">₹${item.price}</div>
-                            <div class="d-flex align-items-center mt-2">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
-                                <span class="mx-2">${item.quantity}</span>
-                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
-                            </div>
-                        </div>
-                        <button class="btn btn-link text-danger" onclick="removeFromCart(${item.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            });
-            
-            cartTotal.textContent = total.toFixed(2);
-        }
-
-        function updateQuantity(productId, change) {
-            const item = cart.find(i => i.id === productId);
-            if (!item) return;
-            
-            item.quantity += change;
-            
-            if (item.quantity <= 0) {
-                removeFromCart(productId);
-                return;
-            }
-            
-            localStorage.setItem('astroCart', JSON.stringify(cart));
-            updateCartCount();
-            displayCartItems();
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            localStorage.setItem('astroCart', JSON.stringify(cart));
-            updateCartCount();
-            displayCartItems();
-        }
-
-        // ============ CHECKOUT ============
-        function openCheckout() {
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
-            
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            document.getElementById('checkoutAmount').textContent = total.toFixed(2);
-            document.getElementById('checkoutModal').style.display = 'block';
-            closeCart();
+            document.getElementById('addressModal').style.display = 'block';
             closeProductModal();
         }
 
-        function processPayment(event) {
+        function openPayment(event) {
             event.preventDefault();
             
-            // Collect customer details
-            const customerDetails = {
-                fullName: document.getElementById('fullName').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
-                pincode: document.getElementById('pincode').value,
-                landmark: document.getElementById('landmark').value,
-                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            const product = products.find(p => p.id === currentProductId);
+            if (!product) return;
+            
+            currentOrderData = {
+                product: product,
+                customerDetails: {
+                    fullName: document.getElementById('fullName').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    pincode: document.getElementById('pincode').value
+                },
+                amount: product.price
             };
             
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            document.getElementById('paymentAmount').textContent = product.price.toFixed(2);
+            document.getElementById('payButtonAmount').textContent = product.price.toFixed(2);
             
-            // Create order
+            document.getElementById('addressModal').style.display = 'none';
+            document.getElementById('paymentModal').style.display = 'block';
+            document.getElementById('addressForm').reset();
+        }
+
+        // UPI PAYMENT
+        function selectUPI(app) {
+            selectedUPIApp = app;
+            document.querySelectorAll('.upi-app').forEach(el => {
+                el.style.borderColor = 'var(--border)';
+            });
+            event.target.closest('.upi-app').style.borderColor = 'var(--gold)';
+        }
+
+        function processUPIPayment() {
+            if (!currentOrderData) return;
+            
+            const amount = currentOrderData.amount;
+            const productName = currentOrderData.product.name;
+            
+            // Create UPI payment link
+            let upiLink = '';
+            
+            switch(selectedUPIApp) {
+                case 'googlepay':
+                    upiLink = `tez://upi/pay?pa=${UPI_ID}&pn=AstroChain&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+                    break;
+                case 'phonepe':
+                    upiLink = `phonepe://pay?pa=${UPI_ID}&pn=AstroChain&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+                    break;
+                case 'paytm':
+                    upiLink = `paytmmp://pay?pa=${UPI_ID}&pn=AstroChain&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+                    break;
+                default:
+                    upiLink = `upi://pay?pa=${UPI_ID}&pn=AstroChain&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+            }
+            
+            // Try to open UPI app
+            window.location.href = upiLink;
+            
+            // After 2 seconds, show payment confirmation
+            setTimeout(() => {
+                const confirmed = confirm('Have you completed the payment?');
+                if (confirmed) {
+                    completeOrder();
+                }
+            }, 2000);
+        }
+
+        function completeOrder() {
+            if (!currentOrderData) return;
+            
             const order = {
                 id: Date.now(),
-                items: [...cart],
-                total: total,
-                customerDetails: customerDetails,
+                product: currentOrderData.product,
+                customerDetails: currentOrderData.customerDetails,
+                amount: currentOrderData.amount,
+                paymentMethod: selectedUPIApp,
                 date: new Date().toISOString(),
                 status: 'Confirmed'
             };
@@ -1109,27 +1045,19 @@
             orders.push(order);
             localStorage.setItem('astroOrders', JSON.stringify(orders));
             
-            // Clear cart
-            cart = [];
-            localStorage.setItem('astroCart', JSON.stringify(cart));
-            updateCartCount();
-            
-            // Hide checkout modal
-            document.getElementById('checkoutModal').style.display = 'none';
-            document.getElementById('checkoutForm').reset();
-            
-            // Show success modal
+            document.getElementById('paymentModal').style.display = 'none';
             document.getElementById('successOrderId').textContent = order.id;
             document.getElementById('successModal').style.display = 'flex';
             
-            // After 3 seconds, redirect to home
             setTimeout(() => {
                 document.getElementById('successModal').style.display = 'none';
+                currentProductId = null;
+                currentOrderData = null;
                 showHome();
             }, 3000);
         }
 
-        // ============ MY ORDERS ============
+        // MY ORDERS
         function loadMyOrders() {
             const ordersList = document.getElementById('ordersList');
             
@@ -1149,7 +1077,7 @@
             
             orders.reverse().forEach(order => {
                 ordersList.innerHTML += `
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px;">
+                    <div class="order-card">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <strong>Order #${order.id}</strong>
@@ -1157,50 +1085,26 @@
                             </div>
                             <small class="text-muted">${new Date(order.date).toLocaleDateString()}</small>
                         </div>
-                        <div class="mb-3">
-                            ${order.items.map(item => `
-                                <div class="d-flex align-items-center mb-2">
-                                    <img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
-                                    <span>${item.name} × ${item.quantity}</span>
-                                    <span class="ms-auto">₹${item.price * item.quantity}</span>
-                                </div>
-                            `).join('')}
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="${order.product.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 15px;">
+                            <div>
+                                <strong>${order.product.name}</strong>
+                                <div style="color: var(--gold);">₹${order.amount}</div>
+                            </div>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between">
-                            <strong>Total:</strong>
-                            <strong>₹${order.total.toFixed(2)}</strong>
+                            <span>Payment Method:</span>
+                            <strong>${order.paymentMethod.toUpperCase()}</strong>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // ============ NOTIFICATION ============
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 90px;
-                right: 20px;
-                background: #1a1a1a;
-                color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                z-index: 10000;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                border-left: 4px solid #c9a84c;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        // ============ INITIALIZE ============
+        // INITIALIZE
         document.addEventListener('DOMContentLoaded', function() {
             loadProducts('productGrid');
-            updateCartCount();
         });
     </script>
 </body>
