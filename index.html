@@ -32,6 +32,7 @@
             padding-top: 70px;
         }
 
+        /* NAVBAR */
         .navbar {
             background: var(--white);
             padding: 0;
@@ -104,6 +105,7 @@
             color: var(--dark);
         }
 
+        /* HERO */
         .hero {
             background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
             padding: 60px 0;
@@ -162,6 +164,7 @@
             transform: translateY(-3px);
         }
 
+        /* PRODUCTS SECTION */
         .products-section {
             padding: 40px 0;
         }
@@ -184,6 +187,7 @@
             margin: 15px auto;
         }
 
+        /* PRODUCT CARD - SQUARE IMAGES */
         .product-card {
             background: var(--white);
             border: 1px solid var(--border);
@@ -200,12 +204,27 @@
             border-color: var(--gold);
         }
 
-        .product-image {
-            height: 280px;
-            background-size: cover;
-            background-position: center;
+        .product-image-wrapper {
             position: relative;
-            background-color: var(--gray);
+            width: 100%;
+            padding-bottom: 100%; /* SQUARE ASPECT RATIO */
+            background: var(--gray);
+            overflow: hidden;
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
         }
 
         .product-badge {
@@ -218,6 +237,7 @@
             border-radius: 50px;
             font-size: 11px;
             font-weight: 600;
+            z-index: 2;
         }
 
         .product-info {
@@ -275,7 +295,7 @@
             transform: scale(1.02);
         }
 
-        /* Product Modal */
+        /* PRODUCT MODAL - SQUARE IMAGES */
         .product-modal {
             display: none;
             position: fixed;
@@ -324,34 +344,39 @@
 
         .product-gallery {
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .main-image-container {
-            flex: 1;
             position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* SQUARE */
             border-radius: 15px;
             overflow: hidden;
             background: var(--gray);
-            height: 500px;
         }
 
         .main-image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: all 0.3s;
+            object-position: center;
         }
 
-        .thumbnail-list {
-            display: flex;
-            flex-direction: column;
+        .thumbnail-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
         }
 
         .thumbnail {
-            width: 80px;
-            height: 80px;
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* SQUARE */
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
@@ -359,20 +384,23 @@
             transition: all 0.3s;
         }
 
+        .thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
         .thumbnail:hover {
             border-color: var(--gold);
-            transform: scale(1.05);
         }
 
         .thumbnail.active {
             border-color: var(--gold);
             box-shadow: 0 0 15px rgba(201, 168, 76, 0.5);
-        }
-
-        .thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .product-details {
@@ -389,21 +417,21 @@
 
         .product-details h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .product-details .price {
             font-size: 28px;
             font-weight: 700;
             color: var(--dark);
             margin-bottom: 15px;
         }
 
+        .product-details .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
         .product-details .price .original-price {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .product-details .description {
@@ -452,16 +480,14 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-            margin-bottom: 15px;
         }
 
         .btn-buy-now:hover {
             background: var(--dark);
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* Checkout Modal */
+        /* CHECKOUT MODAL */
         .checkout-modal {
             display: none;
             position: fixed;
@@ -516,7 +542,7 @@
             border-color: var(--gold);
         }
 
-        /* Payment Modal */
+        /* PAYMENT MODAL */
         .payment-modal {
             display: none;
             position: fixed;
@@ -549,7 +575,6 @@
         .payment-app:hover {
             border-color: var(--gold);
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .payment-app i {
@@ -563,7 +588,7 @@
             font-size: 14px;
         }
 
-        /* Success Modal */
+        /* SUCCESS MODAL */
         .success-modal {
             display: none;
             position: fixed;
@@ -573,7 +598,6 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.85);
-            display: flex;
             justify-content: center;
             align-items: center;
         }
@@ -596,15 +620,41 @@
             font-size: 80px;
             color: #28a745;
             margin-bottom: 20px;
-            animation: bounce 0.5s;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        /* ORDER CARD */
+        .order-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            .product-details {
+                padding: 15px;
+            }
+            
+            .product-details h2 {
+                font-size: 24px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
         }
 
         @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar .container {
+                height: 60px;
+            }
+            
             .hamburger {
                 display: block;
             }
@@ -612,7 +662,7 @@
             .nav-menu {
                 display: none;
                 position: absolute;
-                top: 70px;
+                top: 60px;
                 left: 0;
                 right: 0;
                 background: var(--white);
@@ -627,41 +677,121 @@
 
             .nav-link {
                 padding: 15px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero {
+                padding: 40px 0;
             }
 
             .hero-title {
                 font-size: 28px;
             }
 
-            .product-image {
-                height: 220px;
+            .hero-subtitle {
+                font-size: 14px;
             }
 
-            .product-gallery {
-                flex-direction: column;
-            }
-
-            .main-image-container {
-                height: 300px;
-            }
-
-            .thumbnail-list {
-                flex-direction: row;
-                overflow-x: auto;
-            }
-
-            .thumbnail {
-                width: 60px;
-                height: 60px;
-                flex-shrink: 0;
-            }
-
-            .product-details h2 {
+            .section-title {
                 font-size: 24px;
             }
 
+            .product-image-wrapper {
+                padding-bottom: 100%; /* STILL SQUARE ON MOBILE */
+            }
+
+            .modal-content {
+                margin: 15px auto;
+                padding: 15px;
+                width: 95%;
+            }
+
+            .product-gallery {
+                gap: 10px;
+            }
+
+            .main-image-container {
+                padding-bottom: 100%;
+            }
+
+            .thumbnail-row {
+                gap: 8px;
+            }
+
+            .product-details {
+                padding: 15px 10px;
+            }
+
+            .product-details h2 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
             .product-details .price {
-                font-size: 22px;
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .product-details .description {
+                font-size: 13px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+
+            .btn-buy-now {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+
+            .checkout-content {
+                margin: 15px auto;
+                padding: 20px;
+                width: 95%;
+            }
+
+            .payment-options {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .payment-app {
+                padding: 15px;
+            }
+
+            .payment-app i {
+                font-size: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 24px;
+            }
+            
+            .btn-shop {
+                padding: 10px 25px;
+                font-size: 12px;
+            }
+            
+            .product-title {
+                font-size: 16px;
+            }
+            
+            .product-price {
+                font-size: 18px;
+            }
+            
+            .modal-content {
+                padding: 10px;
+            }
+            
+            .product-details h2 {
+                font-size: 18px;
+            }
+            
+            .thumbnail-row {
+                gap: 5px;
             }
         }
     </style>
@@ -728,7 +858,7 @@
                         <div class="main-image-container">
                             <img id="modalMainImage" src="" alt="Product">
                         </div>
-                        <div class="thumbnail-list" id="modalThumbnails"></div>
+                        <div class="thumbnail-row" id="modalThumbnails"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -775,7 +905,7 @@
     </div>
 
     <!-- SUCCESS MODAL -->
-    <div class="success-modal" id="successModal" style="display: none;">
+    <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-icon"><i class="fas fa-check-circle"></i></div>
             <h3 style="color: #28a745; margin-bottom: 10px;">Order Successful!</h3>
@@ -786,7 +916,6 @@
 
     <script>
         // ============ FIREBASE CONFIG ============
-        // YAHAN APNI ACTUAL FIREBASE CONFIG DALO
         const firebaseConfig = {
             apiKey: "AIzaSyANmp8uHEIRtEHh8BCW0aWc6j7vIdqgl6w",
   authDomain: "astrochain-b1bcf.firebaseapp.com",
@@ -801,12 +930,11 @@
         const database = firebase.database();
         
         // ============ CONFIGURATION ============
-        const UPI_ID = "yourname@upi"; // APNA UPI ID
+        const UPI_ID = "yourname@upi";
         const MERCHANT_NAME = "AstroChain";
         
         // ============ DATA ============
         let products = [];
-        let orders = [];
         let currentProductId = null;
         let currentOrderData = null;
 
@@ -865,7 +993,6 @@
                         const product = data[key];
                         product.id = key;
                         
-                        // Ensure 4 images
                         if (!product.images || product.images.length < 4) {
                             const mainImage = product.image || 'https://via.placeholder.com/800x800?text=AstroChain';
                             product.images = [
@@ -901,9 +1028,10 @@
                 const discount = product.discount || 0;
                 
                 grid.innerHTML += `
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-4 col-sm-6 col-12">
                         <div class="product-card" onclick="openProductModal('${product.id}')">
-                            <div class="product-image" style="background-image: url('${mainImage}')">
+                            <div class="product-image-wrapper">
+                                <img src="${mainImage}" class="product-image" alt="${product.name}">
                                 ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
                             </div>
                             <div class="product-info">
@@ -927,17 +1055,13 @@
             
             currentProductId = productId;
             
-            // Set main image
             document.getElementById('modalMainImage').src = product.images[0];
-            
-            // Set product details
             document.getElementById('modalCategory').textContent = product.category || 'Astrology';
             document.getElementById('modalTitle').textContent = product.name;
             document.getElementById('modalPrice').textContent = product.price;
             document.getElementById('modalOriginalPrice').textContent = product.originalPrice > product.price ? '₹' + product.originalPrice : '';
             document.getElementById('modalDescription').textContent = product.description || 'No description available';
             
-            // Set stock info
             const stockInfo = document.getElementById('modalStock');
             if (product.stock > 10) {
                 stockInfo.innerHTML = '<span class="stock-badge stock-in">✓ In Stock</span>';
@@ -947,7 +1071,6 @@
                 stockInfo.innerHTML = '<span class="stock-badge stock-out">✗ Out of Stock</span>';
             }
             
-            // Generate thumbnails (4 images)
             const thumbnails = document.getElementById('modalThumbnails');
             thumbnails.innerHTML = '';
             
@@ -965,7 +1088,6 @@
                 thumbnails.appendChild(thumb);
             });
             
-            // Show modal
             document.getElementById('productModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
@@ -1123,7 +1245,7 @@
             });
         }
 
-        // ============ CLOSE MODALS ON BACKGROUND CLICK ============
+        // ============ CLOSE MODALS ============
         window.onclick = function(event) {
             if (event.target === document.getElementById('productModal')) {
                 closeProductModal();
