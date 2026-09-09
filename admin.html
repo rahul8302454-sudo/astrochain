@@ -512,7 +512,7 @@
 
             <!-- Add Product Tab -->
             <div id="addProduct" class="tab" style="display: none;">
-                <h2>Add New Product</h2>
+                <h2>Add New Product (HD Images)</h2>
                 <div class="card">
                     <form id="productForm">
                         <div class="row">
@@ -567,15 +567,15 @@
                         </div>
                         
                         <div class="form-group">
-                            <label>Product Images (Upload 4 Images) *</label>
+                            <label>Product Images (HD Quality - 4 Images) *</label>
                             <div class="image-upload-container" id="imageUploadContainer">
                                 <!-- 4 image upload boxes will be here -->
                             </div>
-                            <small style="color: #666;">Click each box to upload an image. First image will be the main image.</small>
+                            <small style="color: #666;">HD images upload hongi, quality maintain rahegi (1200px resolution)</small>
                         </div>
                         
                         <button type="button" class="btn-add" onclick="addProduct()">
-                            <i class="fas fa-plus"></i> Add Product
+                            <i class="fas fa-plus"></i> Add Product (HD)
                         </button>
                     </form>
                 </div>
@@ -633,12 +633,12 @@
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyANmp8uHEIRtEHh8BCW0aWc6j7vIdqgl6w",
-  authDomain: "astrochain-b1bcf.firebaseapp.com",
-  databaseURL: "https://astrochain-b1bcf-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "astrochain-b1bcf",
-  storageBucket: "astrochain-b1bcf.firebasestorage.app",
-  messagingSenderId: "207312544291",
-  appId: "1:207312544291:web:48c5609ef5a04180148796"
+            authDomain: "astrochain-b1bcf.firebaseapp.com",
+            databaseURL: "https://astrochain-b1bcf-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "astrochain-b1bcf",
+            storageBucket: "astrochain-b1bcf.firebasestorage.app",
+            messagingSenderId: "207312544291",
+            appId: "1:207312544291:web:48c5609ef5a04180148796"
         };
         
         firebase.initializeApp(firebaseConfig);
@@ -671,7 +671,7 @@
             }
         }
         
-        // Handle image upload for specific slot
+        // Handle image upload for specific slot - HD QUALITY
         function handleImageUpload(index, event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -681,14 +681,38 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const maxWidth = 500;
-                    const ratio = maxWidth / img.width;
-                    canvas.width = maxWidth;
-                    canvas.height = img.height * ratio;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    const compressedImage = canvas.toDataURL('image/jpeg', 0.6);
+                    // HD Resolution - 1200px width
+                    const maxWidth = 1200;
+                    const maxHeight = 1200;
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Maintain aspect ratio
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    
+                    // High quality rendering
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // High quality JPEG (0.92 = 92% quality)
+                    const compressedImage = canvas.toDataURL('image/jpeg', 0.92);
                     uploadedImages[index] = compressedImage;
                     
                     // Update UI
@@ -701,6 +725,9 @@
                         <input type="file" id="fileInput${index}" accept="image/*" style="display: none;" onchange="handleImageUpload(${index}, event)">
                     `;
                     box.onclick = () => document.getElementById(`fileInput${index}`).click();
+                    
+                    // Show resolution info
+                    console.log(`Image ${index + 1} uploaded: ${width}x${height}px (HD)`);
                 };
                 img.src = e.target.result;
             };
@@ -845,9 +872,8 @@
                 const stockClass = p.stock > 10 ? 'stock-high' : p.stock > 3 ? 'stock-medium' : 'stock-low';
                 const stockText = p.stock > 10 ? 'In Stock' : p.stock > 3 ? 'Low Stock' : 'Out of Stock';
                 
-                // Show first 3 images as thumbnails
                 const images = (p.images || [p.image]).slice(0, 3);
-                const imagesHtml = images.map(img => `<img src="${img}" style="width: 30px; height: 30px; margin: 2px;">`).join('');
+                const imagesHtml = images.map(img => `<img src="${img}" style="width: 30px; height: 30px; margin: 2px; object-fit: cover;">`).join('');
                 
                 return `<tr>
                     <td>${imagesHtml}</td>
@@ -915,7 +941,7 @@
             }
         }
         
-        // Add Product
+        // Add Product with HD Images
         function addProduct() {
             const name = document.getElementById('productName').value.trim();
             const category = document.getElementById('productCategory').value;
@@ -929,14 +955,12 @@
                 return;
             }
             
-            // Check images
             const validImages = uploadedImages.filter(img => img !== null);
             if (validImages.length < 1) {
                 alert('Please upload at least 1 image (Main image is required)!');
                 return;
             }
             
-            // Ensure we have exactly 4 images (fill remaining with last image)
             while (validImages.length < 4) {
                 validImages.push(validImages[validImages.length - 1] || validImages[0]);
             }
@@ -953,13 +977,13 @@
                 images: validImages.slice(0, 4),
                 image: validImages[0],
                 discount: discount,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                imageQuality: 'HD' // Mark as HD
             };
             
-            // Save to Firebase
             const newRef = database.ref('products').push();
             newRef.set(product).then(() => {
-                alert('✅ Product added successfully with 4 images!');
+                alert('✅ Product added successfully with HD images!');
                 document.getElementById('productForm').reset();
                 uploadedImages = [null, null, null, null];
                 initializeImageUploads();
@@ -967,7 +991,6 @@
                 showTab('products', document.querySelectorAll('.sidebar button')[1]);
             }).catch(error => {
                 console.error('Error adding product:', error);
-                // Save locally
                 product.id = 'local_' + Date.now();
                 products.push(product);
                 localStorage.setItem('astroProducts', JSON.stringify(products));
