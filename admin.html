@@ -308,6 +308,31 @@
             border-radius: 5px;
         }
 
+        .order-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .order-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
         @media (max-width: 768px) {
             .admin-sidebar {
                 width: 100%;
@@ -557,11 +582,12 @@
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>Customer</th>
+                                    <th>Customer Details</th>
                                     <th>Product</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="ordersTableBody">
@@ -824,20 +850,100 @@
             const tableBody = document.getElementById('ordersTableBody');
             
             if (orders.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No orders yet</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No orders yet</td></tr>';
                 return;
             }
             
             tableBody.innerHTML = '';
             orders.slice().reverse().forEach(function(order) {
+                const customer = order.customerDetails || {};
+                const product = order.product || {};
+                
                 tableBody.innerHTML += '<tr>' +
                     '<td><strong>#' + order.id + '</strong></td>' +
-                    '<td>' + (order.customerDetails ? order.customerDetails.fullName : 'N/A') + '<br><small class="text-muted">' + (order.customerDetails ? order.customerDetails.phone : '') + '</small></td>' +
-                    '<td>' + (order.product ? order.product.name : 'N/A') + '</td>' +
+                    '<td>' +
+                        '<strong>' + (customer.fullName || 'N/A') + '</strong><br>' +
+                        '<small class="text-muted"><i class="fas fa-phone"></i> ' + (customer.phone || 'N/A') + '</small><br>' +
+                        '<small class="text-muted"><i class="fas fa-envelope"></i> ' + (customer.email || 'N/A') + '</small>' +
+                    '</td>' +
+                    '<td>' + (product.name || 'N/A') + '</td>' +
                     '<td>₹' + (order.amount || 0) + '</td>' +
                     '<td><span class="badge bg-success">' + (order.status || 'Confirmed') + '</span></td>' +
                     '<td>' + new Date(order.date).toLocaleDateString() + '</td>' +
+                    '<td>' +
+                        '<button class="btn btn-sm btn-info" onclick="viewOrderDetails(' + order.id + ')" title="View Full Details">' +
+                            '<i class="fas fa-eye"></i> View' +
+                        '</button>' +
+                    '</td>' +
                 '</tr>';
+            });
+        }
+        
+        // ============ VIEW ORDER DETAILS ============
+        function viewOrderDetails(orderId) {
+            const order = orders.find(function(o) { return o.id === orderId; });
+            if (!order) return;
+            
+            const customer = order.customerDetails || {};
+            const product = order.product || {};
+            
+            let detailsHtml = '<div style="text-align: left; font-size: 14px;">';
+            
+            // Order Info
+            detailsHtml += '<h5 style="color: #c9a84c; margin-bottom: 15px; font-weight: 700;">📋 Order Details</h5>';
+            detailsHtml += '<p><strong>Order ID:</strong> #' + order.id + '</p>';
+            detailsHtml += '<p><strong>Date:</strong> ' + new Date(order.date).toLocaleString() + '</p>';
+            detailsHtml += '<p><strong>Status:</strong> <span class="badge bg-success">' + (order.status || 'Confirmed') + '</span></p>';
+            detailsHtml += '<p><strong>Payment Method:</strong> ' + (order.paymentMethod || 'UPI') + '</p>';
+            detailsHtml += '<p><strong>Payment Status:</strong> ' + (order.paymentStatus || 'Paid') + '</p>';
+            
+            detailsHtml += '<hr style="border-color: #f0f0f0;">';
+            
+            // Customer Info
+            detailsHtml += '<h5 style="color: #c9a84c; margin-bottom: 15px; font-weight: 700;">👤 Customer Details</h5>';
+            detailsHtml += '<p><strong>Name:</strong> ' + (customer.fullName || 'N/A') + '</p>';
+            detailsHtml += '<p><strong>Phone:</strong> ' + (customer.phone || 'N/A') + '</p>';
+            detailsHtml += '<p><strong>Email:</strong> ' + (customer.email || 'N/A') + '</p>';
+            
+            detailsHtml += '<hr style="border-color: #f0f0f0;">';
+            
+            // Address Info
+            detailsHtml += '<h5 style="color: #c9a84c; margin-bottom: 15px; font-weight: 700;">📍 Shipping Address</h5>';
+            detailsHtml += '<p><strong>Address:</strong> ' + (customer.address || 'N/A') + '</p>';
+            detailsHtml += '<p><strong>City:</strong> ' + (customer.city || 'N/A') + '</p>';
+            detailsHtml += '<p><strong>State:</strong> ' + (customer.state || 'N/A') + '</p>';
+            detailsHtml += '<p><strong>PIN Code:</strong> ' + (customer.pincode || 'N/A') + '</p>';
+            
+            detailsHtml += '<hr style="border-color: #f0f0f0;">';
+            
+            // Product Info
+            detailsHtml += '<h5 style="color: #c9a84c; margin-bottom: 15px; font-weight: 700;">🛍️ Product Details</h5>';
+            detailsHtml += '<div style="display: flex; align-items: center; margin-bottom: 15px; background: #f8f8f8; padding: 10px; border-radius: 10px;">';
+            detailsHtml += '<img src="' + (product.image || 'https://via.placeholder.com/60') + '" style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px; margin-right: 15px;">';
+            detailsHtml += '<div>';
+            detailsHtml += '<strong style="font-size: 15px;">' + (product.name || 'N/A') + '</strong><br>';
+            detailsHtml += '<span style="color: #c9a84c; font-weight: 700; font-size: 16px;">₹' + (order.amount || 0) + '</span>';
+            detailsHtml += '</div></div>';
+            
+            detailsHtml += '</div>';
+            
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'order-modal';
+            
+            modal.innerHTML = '<div class="order-modal-content">' +
+                '<button onclick="this.closest(\'.order-modal\').remove()" style="position:absolute; top:15px; right:20px; font-size:28px; cursor:pointer; background:none; border:none; color:#333;">&times;</button>' +
+                '<h4 style="margin-bottom: 20px; text-align: center; font-weight: 700; color: #1a1a1a;">Order Details</h4>' +
+                detailsHtml +
+            '</div>';
+            
+            document.body.appendChild(modal);
+            
+            // Close on outside click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
             });
         }
         
