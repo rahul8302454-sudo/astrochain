@@ -229,17 +229,6 @@
             font-size: 12px;
         }
         
-        .btn-edit {
-            background: var(--warning);
-            color: var(--dark);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -265,20 +254,12 @@
             border-radius: 8px;
         }
         
-        .image-preview-container {
-            display: flex;
+        /* Image Upload Styles */
+        .image-upload-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #ddd;
-            position: relative;
         }
         
         .image-upload-box {
@@ -288,17 +269,71 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #fafafa;
         }
         
         .image-upload-box:hover {
             border-color: var(--gold);
-            background: var(--light);
+            background: #f0f0f0;
         }
         
         .image-upload-box i {
-            font-size: 40px;
+            font-size: 30px;
             color: #ccc;
             margin-bottom: 10px;
+        }
+        
+        .image-upload-box.has-image {
+            border-style: solid;
+            border-color: var(--success);
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .image-upload-box.has-image .remove-image {
+            display: block;
+        }
+        
+        .image-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: var(--gold);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 600;
         }
         
         .order-modal {
@@ -340,13 +375,6 @@
             border-radius: 5px;
         }
         
-        .badge-failed {
-            background: var(--danger);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        
         .stock-badge {
             padding: 5px 10px;
             border-radius: 5px;
@@ -378,6 +406,10 @@
             .main-content {
                 margin-left: 0;
                 padding: 15px;
+            }
+            
+            .image-upload-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -464,7 +496,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Image</th>
+                                    <th>Images</th>
                                     <th>Product Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
@@ -536,13 +568,10 @@
                         
                         <div class="form-group">
                             <label>Product Images (Upload 4 Images) *</label>
-                            <div class="image-upload-box" onclick="document.getElementById('productImages').click()">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Click to upload up to 4 images</p>
-                                <small style="color: #999;">First image will be the main image</small>
+                            <div class="image-upload-container" id="imageUploadContainer">
+                                <!-- 4 image upload boxes will be here -->
                             </div>
-                            <input type="file" id="productImages" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
-                            <div class="image-preview-container" id="imagePreviewContainer"></div>
+                            <small style="color: #666;">Click each box to upload an image. First image will be the main image.</small>
                         </div>
                         
                         <button type="button" class="btn-add" onclick="addProduct()">
@@ -618,7 +647,79 @@
         const PASSWORD = "Admin@2024";
         let products = [];
         let orders = [];
-        let uploadedImages = [];
+        let uploadedImages = [null, null, null, null]; // Array for 4 images
+        
+        // Initialize image upload boxes
+        function initializeImageUploads() {
+            const container = document.getElementById('imageUploadContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 4; i++) {
+                const box = document.createElement('div');
+                box.className = 'image-upload-box';
+                box.id = `uploadBox${i}`;
+                box.onclick = () => document.getElementById(`fileInput${i}`).click();
+                
+                box.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p style="font-size: 12px;">Image ${i + 1}</p>
+                    <small style="color: #999;">${i === 0 ? 'Main Image' : 'Optional'}</small>
+                    <input type="file" id="fileInput${i}" accept="image/*" style="display: none;" onchange="handleImageUpload(${i}, event)">
+                `;
+                
+                container.appendChild(box);
+            }
+        }
+        
+        // Handle image upload for specific slot
+        function handleImageUpload(index, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxWidth = 500;
+                    const ratio = maxWidth / img.width;
+                    canvas.width = maxWidth;
+                    canvas.height = img.height * ratio;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const compressedImage = canvas.toDataURL('image/jpeg', 0.6);
+                    uploadedImages[index] = compressedImage;
+                    
+                    // Update UI
+                    const box = document.getElementById(`uploadBox${index}`);
+                    box.classList.add('has-image');
+                    box.innerHTML = `
+                        <img src="${compressedImage}" class="image-preview" alt="Product Image ${index + 1}">
+                        <span class="image-label">${index === 0 ? 'Main' : 'Image ' + (index + 1)}</span>
+                        <button class="remove-image" onclick="event.stopPropagation(); removeImage(${index})">×</button>
+                        <input type="file" id="fileInput${index}" accept="image/*" style="display: none;" onchange="handleImageUpload(${index}, event)">
+                    `;
+                    box.onclick = () => document.getElementById(`fileInput${index}`).click();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Remove image from specific slot
+        function removeImage(index) {
+            uploadedImages[index] = null;
+            const box = document.getElementById(`uploadBox${index}`);
+            box.classList.remove('has-image');
+            box.innerHTML = `
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p style="font-size: 12px;">Image ${index + 1}</p>
+                <small style="color: #999;">${index === 0 ? 'Main Image' : 'Optional'}</small>
+                <input type="file" id="fileInput${index}" accept="image/*" style="display: none;" onchange="handleImageUpload(${index}, event)">
+            `;
+            box.onclick = () => document.getElementById(`fileInput${index}`).click();
+        }
         
         // Login
         function login() {
@@ -649,12 +750,14 @@
             if (tabName === 'orders') loadOrdersTable();
             if (tabName === 'customers') loadCustomersTable();
             if (tabName === 'dashboard') loadDashboard();
+            if (tabName === 'addProduct') initializeImageUploads();
         }
         
         // Load All Data
         function loadAllData() {
             loadProducts();
             loadOrders();
+            initializeImageUploads();
         }
         
         // Load Products from Firebase
@@ -675,7 +778,6 @@
                 }
             }).catch(error => {
                 console.error('Error loading products:', error);
-                // Try localStorage
                 products = JSON.parse(localStorage.getItem('astroProducts') || '[]');
             });
         }
@@ -743,9 +845,13 @@
                 const stockClass = p.stock > 10 ? 'stock-high' : p.stock > 3 ? 'stock-medium' : 'stock-low';
                 const stockText = p.stock > 10 ? 'In Stock' : p.stock > 3 ? 'Low Stock' : 'Out of Stock';
                 
+                // Show first 3 images as thumbnails
+                const images = (p.images || [p.image]).slice(0, 3);
+                const imagesHtml = images.map(img => `<img src="${img}" style="width: 30px; height: 30px; margin: 2px;">`).join('');
+                
                 return `<tr>
-                    <td><img src="${p.images?.[0] || p.image || ''}" alt="${p.name}"></td>
-                    <td><strong>${p.name}</strong><br><small class="text-muted">${p.category || 'N/A'}</small></td>
+                    <td>${imagesHtml}</td>
+                    <td><strong>${p.name}</strong><br><small class="text-muted">${p.description?.substring(0, 50) || ''}...</small></td>
                     <td>${p.category || 'N/A'}</td>
                     <td><strong>₹${p.price}</strong> <small class="text-muted"><del>₹${p.originalPrice || p.price}</del></small></td>
                     <td><span class="stock-badge ${stockClass}">${stockText} (${p.stock || 0})</span></td>
@@ -763,7 +869,14 @@
             if (!product) return;
             
             const images = product.images || [product.image];
-            let imagesHtml = images.map(img => `<img src="${img}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin: 5px;">`).join('');
+            let imagesHtml = '<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">';
+            images.forEach((img, index) => {
+                imagesHtml += `<div style="text-align: center;">
+                    <img src="${img}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                    <br><small>${index === 0 ? 'Main' : 'Image ' + (index + 1)}</small>
+                </div>`;
+            });
+            imagesHtml += '</div>';
             
             const modal = document.createElement('div');
             modal.className = 'order-modal';
@@ -771,15 +884,14 @@
                 <div class="order-modal-content">
                     <button onclick="this.closest('.order-modal').remove()" style="position:absolute; top:15px; right:20px; font-size:25px; cursor:pointer; background:none; border:none;">&times;</button>
                     <h4 style="text-align:center; margin-bottom:20px;">Product Details</h4>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        ${imagesHtml}
-                    </div>
+                    ${imagesHtml}
                     <h5>${product.name}</h5>
                     <p class="text-muted">${product.category}</p>
                     <p>${product.description}</p>
                     <p><strong>Price:</strong> ₹${product.price} <del>₹${product.originalPrice || product.price}</del></p>
                     <p><strong>Discount:</strong> ${product.discount || 0}%</p>
                     <p><strong>Stock:</strong> ${product.stock}</p>
+                    <p><strong>Total Images:</strong> ${images.length}</p>
                 </div>
             `;
             document.body.appendChild(modal);
@@ -795,52 +907,12 @@
                     loadProductsTable();
                 }).catch(error => {
                     console.error('Error deleting product:', error);
-                    alert('Error deleting product');
+                    products = products.filter(p => p.id !== productId);
+                    localStorage.setItem('astroProducts', JSON.stringify(products));
+                    loadProductsTable();
+                    alert('Product deleted from local storage!');
                 });
             }
-        }
-        
-        // Image Upload
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            if (files.length > 4) {
-                alert('Maximum 4 images allowed');
-                return;
-            }
-            
-            uploadedImages = [];
-            const container = document.getElementById('imagePreviewContainer');
-            container.innerHTML = '';
-            
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const maxWidth = 500;
-                        const ratio = maxWidth / img.width;
-                        canvas.width = maxWidth;
-                        canvas.height = img.height * ratio;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const compressedImage = canvas.toDataURL('image/jpeg', 0.6);
-                        uploadedImages[index] = compressedImage;
-                        
-                        const previewDiv = document.createElement('div');
-                        previewDiv.style.position = 'relative';
-                        previewDiv.innerHTML = `
-                            <img src="${compressedImage}" class="image-preview">
-                            ${index === 0 ? '<span style="position:absolute; top:5px; left:5px; background:var(--gold); color:white; padding:2px 8px; border-radius:5px; font-size:10px;">Main</span>' : ''}
-                            <button onclick="this.parentElement.remove(); uploadedImages[${index}] = null;" style="position:absolute; top:5px; right:5px; background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px;">X</button>
-                        `;
-                        container.appendChild(previewDiv);
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
         }
         
         // Add Product
@@ -857,13 +929,14 @@
                 return;
             }
             
+            // Check images
             const validImages = uploadedImages.filter(img => img !== null);
             if (validImages.length < 1) {
-                alert('Please upload at least 1 image!');
+                alert('Please upload at least 1 image (Main image is required)!');
                 return;
             }
             
-            // Pad images to 4 if less
+            // Ensure we have exactly 4 images (fill remaining with last image)
             while (validImages.length < 4) {
                 validImages.push(validImages[validImages.length - 1] || validImages[0]);
             }
@@ -886,10 +959,10 @@
             // Save to Firebase
             const newRef = database.ref('products').push();
             newRef.set(product).then(() => {
-                alert('Product added successfully!');
+                alert('✅ Product added successfully with 4 images!');
                 document.getElementById('productForm').reset();
-                uploadedImages = [];
-                document.getElementById('imagePreviewContainer').innerHTML = '';
+                uploadedImages = [null, null, null, null];
+                initializeImageUploads();
                 loadProducts();
                 showTab('products', document.querySelectorAll('.sidebar button')[1]);
             }).catch(error => {
@@ -899,6 +972,9 @@
                 products.push(product);
                 localStorage.setItem('astroProducts', JSON.stringify(products));
                 alert('Product saved locally!');
+                document.getElementById('productForm').reset();
+                uploadedImages = [null, null, null, null];
+                initializeImageUploads();
                 showTab('products', document.querySelectorAll('.sidebar button')[1]);
             });
         }
@@ -913,7 +989,6 @@
             
             tbody.innerHTML = orders.slice().reverse().map(order => {
                 const customer = order.customerDetails || {};
-                const product = order.product || {};
                 
                 let paymentBadge = '';
                 if (order.paymentStatus === 'Paid') {
@@ -921,16 +996,7 @@
                 } else if (order.paymentStatus === 'Pending') {
                     paymentBadge = '<span class="badge-pending">Pending</span>';
                 } else {
-                    paymentBadge = '<span class="badge-failed">Failed</span>';
-                }
-                
-                let orderBadge = '';
-                if (order.status === 'Confirmed') {
-                    orderBadge = '<span class="badge-success">Confirmed</span>';
-                } else if (order.status === 'Pending') {
-                    orderBadge = '<span class="badge-pending">Pending</span>';
-                } else {
-                    orderBadge = '<span class="badge-failed">Cancelled</span>';
+                    paymentBadge = '<span class="badge-pending">Failed</span>';
                 }
                 
                 return `<tr>
@@ -940,7 +1006,7 @@
                     <td>${customer.phone || 'N/A'}</td>
                     <td><strong>₹${order.amount || 0}</strong></td>
                     <td>${paymentBadge}</td>
-                    <td>${orderBadge}</td>
+                    <td><span class="badge-success">${order.status || 'Confirmed'}</span></td>
                     <td>
                         <button class="btn-view" onclick="viewOrder('${order.id}')"><i class="fas fa-eye"></i> View</button>
                     </td>
@@ -1048,6 +1114,8 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('adminWrapper').style.display = 'block';
             loadAllData();
+        } else {
+            initializeImageUploads();
         }
     </script>
 </body>
