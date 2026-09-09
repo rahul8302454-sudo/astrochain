@@ -7,7 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="products.js"></script>
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    
     <style>
         :root {
             --white: #ffffff;
@@ -457,83 +461,6 @@
             border-color: var(--gold);
         }
 
-        .payment-modal {
-            display: none;
-            position: fixed;
-            z-index: 10001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            overflow-y: auto;
-        }
-
-        .payment-content {
-            background: var(--white);
-            margin: 50px auto;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .upi-apps {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .upi-app {
-            padding: 15px;
-            border: 2px solid var(--border);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upi-app:hover {
-            border-color: var(--gold);
-            background: var(--gray);
-        }
-
-        .upi-app.selected {
-            border-color: var(--gold);
-            background: var(--gray);
-        }
-
-        .upi-app i {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .upi-app p {
-            margin: 0;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .btn-pay {
-            background: var(--gold);
-            color: var(--white);
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 16px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-
-        .btn-pay:hover {
-            background: var(--dark);
-        }
-
         .success-modal {
             display: none;
             position: fixed;
@@ -550,12 +477,6 @@
             padding: 40px;
             border-radius: 20px;
             text-align: center;
-            animation: popIn 0.5s;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .success-icon {
@@ -719,38 +640,6 @@
         </div>
     </div>
 
-    <!-- PAYMENT MODAL -->
-    <div class="payment-modal" id="paymentModal">
-        <div class="payment-content">
-            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Choose Payment App</h3>
-            <p style="color: #666; margin-bottom: 20px;">Total: <strong>₹<span id="paymentAmount">0</span></strong></p>
-            
-            <div class="upi-apps">
-                <div class="upi-app selected" id="app_googlepay" onclick="selectUPI('googlepay')">
-                    <i class="fab fa-google-pay" style="color: #4285F4;"></i>
-                    <p>Google Pay</p>
-                </div>
-                <div class="upi-app" id="app_phonepe" onclick="selectUPI('phonepe')">
-                    <i class="fas fa-mobile-alt" style="color: #5F259F;"></i>
-                    <p>PhonePe</p>
-                </div>
-                <div class="upi-app" id="app_paytm" onclick="selectUPI('paytm')">
-                    <i class="fas fa-wallet" style="color: #00BAF2;"></i>
-                    <p>Paytm</p>
-                </div>
-                <div class="upi-app" id="app_bhim" onclick="selectUPI('bhim')">
-                    <i class="fas fa-university" style="color: #666;"></i>
-                    <p>BHIM/Other</p>
-                </div>
-            </div>
-            
-            <button class="btn-pay" onclick="openUPIApp()">
-                <i class="fas fa-external-link-alt"></i> Pay ₹<span id="payButtonAmount">0</span>
-            </button>
-            <p style="font-size: 11px; color: #999; margin-top: 10px;">You will be redirected to your UPI app</p>
-        </div>
-    </div>
-
     <!-- SUCCESS MODAL -->
     <div class="success-modal" id="successModal">
         <div class="success-content">
@@ -758,27 +647,19 @@
             <h3 style="color: #28a745; margin-bottom: 10px;">Order Successful!</h3>
             <p style="color: #666;">Thank you for your purchase</p>
             <p><strong>Order ID: #<span id="successOrderId"></span></strong></p>
-            <p style="color: #666; margin-top: 10px;">Redirecting to home...</p>
         </div>
     </div>
 
+    <script src="products.js"></script>
     <script>
         // ============ CONFIGURATION ============
         const UPI_ID = "yourname@upi"; // APNA UPI ID YAHAN DALO
-        const MERCHANT_NAME = "AstroChain";
         
         // ============ DATA ============
-        let products = JSON.parse(localStorage.getItem('astroProducts')) || [];
+        let products = [];
         let orders = JSON.parse(localStorage.getItem('astroOrders')) || [];
         let currentProductId = null;
         let currentOrderData = null;
-        let selectedUPIApp = 'googlepay';
-        
-        // If no products in localStorage, use default from products.js
-        if (products.length === 0 && typeof PRODUCTS_DATA !== 'undefined') {
-            products = PRODUCTS_DATA;
-            localStorage.setItem('astroProducts', JSON.stringify(products));
-        }
 
         // ============ NAVIGATION ============
         function toggleMenu() {
@@ -790,7 +671,7 @@
             document.getElementById('collectionSection').style.display = 'none';
             document.getElementById('ordersSection').style.display = 'none';
             setActiveLink('homeLink');
-            loadProducts('productGrid');
+            loadProductsFromCloud('productGrid');
             window.scrollTo(0, 0);
         }
 
@@ -799,7 +680,7 @@
             document.getElementById('collectionSection').style.display = 'block';
             document.getElementById('ordersSection').style.display = 'none';
             setActiveLink('collectionLink');
-            loadProducts('collectionGrid');
+            loadProductsFromCloud('collectionGrid');
             window.scrollTo(0, 0);
         }
 
@@ -821,18 +702,31 @@
             }
         }
 
-        // ============ LOAD PRODUCTS ============
-        function loadProducts(gridId) {
+        // ============ LOAD PRODUCTS FROM FIREBASE ============
+        function loadProductsFromCloud(gridId) {
             const grid = document.getElementById(gridId);
+            grid.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-warning" role="status"></div><p class="mt-3">Loading products...</p></div>';
+            
+            loadProducts(function(data) {
+                products = data;
+                displayProducts(gridId);
+            });
+        }
+
+        function displayProducts(gridId) {
+            const grid = document.getElementById(gridId);
+            
             if (products.length === 0) {
                 grid.innerHTML = '<div class="col-12 text-center py-5"><i class="fas fa-box-open" style="font-size: 60px; color: #ccc;"></i><h4 class="mt-3">No Products Available</h4></div>';
                 return;
             }
+            
             grid.innerHTML = '';
             products.forEach(function(product) {
-                const mainImage = product.images ? product.images[0] : product.image;
-                const discount = product.discount || Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-                grid.innerHTML += '<div class="col-md-4 col-sm-6"><div class="product-card" onclick="openProductModal(' + product.id + ')"><div class="product-image" style="background-image: url(\'' + mainImage + '\')">' + (discount > 0 ? '<span class="product-badge">-' + discount + '%</span>' : '') + '</div><div class="product-info"><div class="product-category">' + (product.category || 'Astrology') + '</div><h3 class="product-title">' + product.name + '</h3><div class="product-price">₹' + product.price + (product.originalPrice > product.price ? '<span class="original-price">₹' + product.originalPrice + '</span>' : '') + '</div><button class="btn-buy" onclick="event.stopPropagation(); quickBuy(' + product.id + ')"><i class="fas fa-bolt"></i> Buy Now</button></div></div></div>';
+                const mainImage = product.image || (product.images && product.images[0]) || 'https://via.placeholder.com/300';
+                const discount = product.discount || 0;
+                
+                grid.innerHTML += '<div class="col-md-4 col-sm-6"><div class="product-card" onclick="openProductModal(\'' + product.id + '\')"><div class="product-image" style="background-image: url(\'' + mainImage + '\')">' + (discount > 0 ? '<span class="product-badge">-' + discount + '%</span>' : '') + '</div><div class="product-info"><div class="product-category">' + (product.category || 'Astrology') + '</div><h3 class="product-title">' + product.name + '</h3><div class="product-price">₹' + product.price + (product.originalPrice > product.price ? '<span class="original-price">₹' + product.originalPrice + '</span>' : '') + '</div><button class="btn-buy" onclick="event.stopPropagation(); quickBuy(\'' + product.id + '\')"><i class="fas fa-bolt"></i> Buy Now</button></div></div></div>';
             });
         }
 
@@ -841,6 +735,7 @@
             const product = products.find(function(p) { return p.id === productId; });
             if (!product) return;
             currentProductId = productId;
+            
             const images = product.images || [product.image];
             document.getElementById('modalMainImage').src = images[0];
             document.getElementById('modalCategory').textContent = product.category || 'Astrology';
@@ -848,11 +743,13 @@
             document.getElementById('modalPrice').textContent = product.price;
             document.getElementById('modalOriginalPrice').textContent = product.originalPrice > product.price ? '₹' + product.originalPrice : '';
             document.getElementById('modalDescription').textContent = product.description;
+            
             const thumbnails = document.getElementById('modalThumbnails');
             thumbnails.innerHTML = '';
             images.forEach(function(img, index) {
                 thumbnails.innerHTML += '<div class="thumbnail ' + (index === 0 ? 'active' : '') + '" onclick="changeModalImage(\'' + img + '\', this)"><img src="' + img + '" alt="Thumbnail"></div>';
             });
+            
             document.getElementById('productModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
@@ -860,7 +757,6 @@
         function closeProductModal() {
             document.getElementById('productModal').style.display = 'none';
             document.body.style.overflow = 'auto';
-            currentProductId = null;
         }
 
         function changeModalImage(imageSrc, element) {
@@ -869,21 +765,18 @@
             element.classList.add('active');
         }
 
-        // ============ QUICK BUY ============
+        // ============ BUY ============
         function quickBuy(productId) {
             currentProductId = productId;
             openAddressForm();
         }
 
-        // ============ ADDRESS FORM ============
         function openAddressForm() {
-            if (currentProductId === null) return;
             document.getElementById('productModal').style.display = 'none';
             document.getElementById('addressModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        // ============ GO TO PAYMENT ============
         function goToPayment() {
             const product = products.find(function(p) { return p.id === currentProductId; });
             if (!product) { alert('Product not found!'); return; }
@@ -908,88 +801,21 @@
                 orderId: 'ORDER' + Date.now()
             };
             
-            document.getElementById('paymentAmount').textContent = product.price.toFixed(2);
-            document.getElementById('payButtonAmount').textContent = product.price.toFixed(2);
-            
-            document.getElementById('addressModal').style.display = 'none';
-            document.getElementById('paymentModal').style.display = 'block';
-            document.getElementById('addressForm').reset();
-        }
-
-        // ============ SELECT UPI APP ============
-        function selectUPI(app) {
-            selectedUPIApp = app;
-            document.querySelectorAll('.upi-app').forEach(function(el) {
-                el.classList.remove('selected');
-                el.style.borderColor = '#e0e0e0';
-                el.style.background = '#ffffff';
-            });
-            const selectedEl = document.getElementById('app_' + app);
-            if (selectedEl) {
-                selectedEl.classList.add('selected');
-                selectedEl.style.borderColor = '#c9a84c';
-                selectedEl.style.background = '#f8f8f8';
-            }
-        }
-
-        // ============ OPEN UPI APP ============
-        function openUPIApp() {
-            if (!currentOrderData) { alert('Order data not found!'); return; }
-            
-            const amount = currentOrderData.amount;
-            const productName = currentOrderData.product.name;
-            const orderId = currentOrderData.orderId;
-            
-            const upiParams = new URLSearchParams({
-                pa: UPI_ID,
-                pn: MERCHANT_NAME,
-                am: amount.toString(),
-                cu: 'INR',
-                tn: 'Payment for ' + productName,
-                tr: orderId
-            });
-            
-            const upiLink = 'upi://pay?' + upiParams.toString();
-            
-            let appLink = upiLink;
-            if (selectedUPIApp === 'googlepay') {
-                appLink = 'tez://upi/pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'phonepe') {
-                appLink = 'phonepe://pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'paytm') {
-                appLink = 'paytmmp://pay?' + upiParams.toString();
-            } else if (selectedUPIApp === 'bhim') {
-                appLink = 'bhim://upi/pay?' + upiParams.toString();
-            }
-            
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = appLink;
-                document.body.appendChild(iframe);
-                
-                setTimeout(function() {
-                    window.location.href = upiLink;
-                }, 1000);
-                
-                setTimeout(function() {
-                    document.body.removeChild(iframe);
-                }, 3000);
-            } else {
-                alert('Please pay using UPI ID: ' + UPI_ID + '\nAmount: ₹' + amount + '\nOrder ID: ' + orderId);
-            }
+            // Simple UPI payment
+            const upiLink = 'upi://pay?pa=' + UPI_ID + '&pn=AstroChain&am=' + product.price + '&cu=INR&tn=' + encodeURIComponent(product.name);
+            window.location.href = upiLink;
             
             setTimeout(function() {
-                const confirmed = confirm('Payment complete?\n\nOrder ID: ' + orderId + '\nAmount: ₹' + amount + '\n\nClick OK to confirm your order.');
+                const confirmed = confirm('Payment complete? Click OK to confirm.');
                 if (confirmed) {
                     completeOrder();
                 }
             }, 5000);
+            
+            document.getElementById('addressModal').style.display = 'none';
+            document.getElementById('addressForm').reset();
         }
 
-        // ============ COMPLETE ORDER ============
         function completeOrder() {
             if (!currentOrderData) return;
             
@@ -998,7 +824,7 @@
                 product: currentOrderData.product,
                 customerDetails: currentOrderData.customerDetails,
                 amount: currentOrderData.amount,
-                paymentMethod: selectedUPIApp.toUpperCase(),
+                paymentMethod: 'UPI',
                 paymentStatus: 'Paid',
                 date: new Date().toISOString(),
                 status: 'Confirmed'
@@ -1007,19 +833,11 @@
             orders.push(order);
             localStorage.setItem('astroOrders', JSON.stringify(orders));
             
-            document.getElementById('paymentModal').style.display = 'none';
             document.getElementById('successOrderId').textContent = order.id;
-            
-            const successModal = document.getElementById('successModal');
-            successModal.style.display = 'flex';
-            successModal.style.justifyContent = 'center';
-            successModal.style.alignItems = 'center';
+            document.getElementById('successModal').style.display = 'flex';
             
             setTimeout(function() {
-                successModal.style.display = 'none';
-                currentProductId = null;
-                currentOrderData = null;
-                document.body.style.overflow = 'auto';
+                document.getElementById('successModal').style.display = 'none';
                 showHome();
             }, 3000);
         }
@@ -1028,18 +846,18 @@
         function loadMyOrders() {
             const ordersList = document.getElementById('ordersList');
             if (orders.length === 0) {
-                ordersList.innerHTML = '<div class="text-center py-5"><i class="fas fa-shopping-bag" style="font-size: 60px; color: #ccc;"></i><h4 class="mt-3">No Orders Yet</h4><p class="text-muted">Your orders will appear here</p><button class="btn-shop mt-3" onclick="showCollection()">Start Shopping</button></div>';
+                ordersList.innerHTML = '<div class="text-center py-5"><i class="fas fa-shopping-bag" style="font-size: 60px; color: #ccc;"></i><h4 class="mt-3">No Orders Yet</h4></div>';
                 return;
             }
             ordersList.innerHTML = '';
             orders.slice().reverse().forEach(function(order) {
-                ordersList.innerHTML += '<div class="order-card"><div class="d-flex justify-content-between align-items-center mb-3"><div><strong>Order #' + order.id + '</strong> <span class="badge bg-success ms-2">' + order.status + '</span></div><small class="text-muted">' + new Date(order.date).toLocaleDateString() + '</small></div><div class="d-flex align-items-center mb-3"><img src="' + order.product.image + '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 15px;"><div><strong>' + order.product.name + '</strong><div style="color: #c9a84c;">₹' + order.amount + '</div></div></div><hr><div class="d-flex justify-content-between"><span>Payment Method:</span><strong>' + order.paymentMethod + '</strong></div><div class="d-flex justify-content-between mt-2"><span>Payment Status:</span><strong style="color: #28a745;">' + order.paymentStatus + '</strong></div></div>';
+                ordersList.innerHTML += '<div class="order-card"><div class="d-flex justify-content-between"><div><strong>#' + order.id + '</strong> <span class="badge bg-success">' + order.status + '</span></div><small>' + new Date(order.date).toLocaleDateString() + '</small></div><div class="mt-2"><strong>' + order.product.name + '</strong> - ₹' + order.amount + '</div></div>';
             });
         }
 
-        // ============ INITIALIZE ============
+        // ============ INIT ============
         document.addEventListener('DOMContentLoaded', function() {
-            loadProducts('productGrid');
+            loadProductsFromCloud('productGrid');
         });
     </script>
 </body>
